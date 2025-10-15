@@ -20,7 +20,7 @@ class Network():
         """Return the output of the network if "a" is input."""
         for b, w in zip(self.biases, self.weights):
             a = sigmoid(np.dot(w, a) + b)
-        return a       
+        return a
 
     def SGD(self, training_data, epochs, mini_batch_size, eta, test_data=None):
         """Train the neural network using mini-batch stochastic gradient descent. 
@@ -102,6 +102,9 @@ class Network():
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
+        # argmax restituisce l’indice dell’elemento con il valore massimo
+        # qua sotto otteniamo una lista di tuple formate da classificazione
+        # della nostra rete e classificazione corretta
         test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
