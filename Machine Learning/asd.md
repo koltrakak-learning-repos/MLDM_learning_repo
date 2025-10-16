@@ -64,3 +64,23 @@ descriptive statistics = measures that describe status of something
 set means no ordering
 
 interval data are numbers but not quite. They miss a unique zero
+
+ratio kind of data have a meaningful answer to questions like is a twice as much as b?
+
+Un attributo asimmetrico è un tipo di attributo binario (cioè con due valori: 0/1, vero/falso, sì/no) in cui solo la presenza (1) è considerata informativa, mentre l’assenza (0) non è interessante.
+
+- e.g esame passato -> asimmetrico; sesso: m/f -> simmetrico
+...
+
+interessante i fatto che un dato null possa significare due cose:
+
+- non so la targa della macchina
+- so che la targa non esiste
+
+...
+
+transaction -> e.g. a basket of items at the supermarket
+
+...
+
+outliers can be generated from a rare event or from noise... it's not easy to distinguish between the two cases
