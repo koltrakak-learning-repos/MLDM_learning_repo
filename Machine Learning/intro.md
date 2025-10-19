@@ -61,15 +61,27 @@ descriptive statistics = measures that describe status of something
 
 - stuff like mean, median, variance, ...
 
+```
+sinceramente come sono state spiegate le diverse categorie di dato non è chiarissimo. Fai prima a cercare online
+```
+
 set means no ordering
 
 interval data are numbers but not quite. They miss a unique zero
 
 ratio kind of data have a meaningful answer to questions like is a twice as much as b?
 
+### allowed transformations
+
+...
+
+### General characteristics of data sets
+
 Un attributo asimmetrico è un tipo di attributo binario (cioè con due valori: 0/1, vero/falso, sì/no) in cui solo la presenza (1) è considerata informativa, mentre l’assenza (0) non è interessante.
 
 - e.g esame passato -> asimmetrico; sesso: m/f -> simmetrico
+- **In particular, binary asymmetric attributes are relevant in the discovery of association rules**
+
 ...
 
 interessante i fatto che un dato null possa significare due cose:
@@ -83,4 +95,48 @@ transaction -> e.g. a basket of items at the supermarket
 
 ...
 
+# Data Quality
+
+- Which are the problems?
+  - noise and outliers
+  - missing values
+  - duplicates
+  - inconsistencies
+- How can we detect the problems?
+- What can we do about these problems?
+
+...
+
 outliers can be generated from a rare event or from noise... it's not easy to distinguish between the two cases
+
+...
+
+### Detecting outliers tramite inter-quartile-range
+
+Questa tecnica si basa sulla suddivisione dei dati in quartili:
+
+- Q1 (primo quartile): il 25% dei dati è sotto questo valore
+- Q2 (mediana): il 50% dei dati è sotto questo valore
+- Q3 (terzo quartile): il 75% dei dati è sotto questo valore
+
+L’IQR (InterQuartile Range) rappresenta l’ampiezza della parte centrale dei dati: IQR=Q3−Q1
+
+- Misura la dispersione dei dati senza farsi influenzare dagli outlier.
+- L’idea è che i valori troppo lontani dal “cuore” della distribuzione siano probabilmente outlier.
+
+Si definiscono due limiti (boundary):
+
+- Lower Boundary: Q1 − 1.5*IQR
+- Upper Boundary: Q3 + 1.5*IQR
+
+Un valore è considerato outlier se:
+
+- è più piccolo del limite inferiore, oppure
+- è più grande del limite superiore
+
+Nei boxplot:
+
+- la scatola va da Q1 a Q3
+  - la linea dentro la scatola è la mediana (Q2)
+- i whisker (baffi) arrivano fino all’ultimo valore dentro i bondary
+- i valori fuori dai baffi sono segnati come outlier (puntini)

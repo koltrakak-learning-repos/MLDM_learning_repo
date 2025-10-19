@@ -9,18 +9,28 @@ How do we evaluate the performance of our model?
 - a training set
 - a testing set
 
-...
-
 even the best position of the straight line misclassifies some points
 
 - this decision function is limited
 
-also, problem of generalization
+ **Vapnik-Chervonenkis Dimension**: Given a dataset with N elements there are 2^N possible different learning problems
 
-- the perfect function for a dataset would not be suitable for new data
+- consideriamo solo due classi
+- il primo learning problem con tutti gli n elementi appartenenti alla prima classe, il secondo con tutti meno uno, ecc...
 
-One of the main tradeoffs for machine learning is to balance the classification with generalization
+If a model M is able to shatter (classificare correttamente) all the possible learning problems for at least one set of N elements, we say that it has Vapnik-Chervonenkis Dimension equal to N
+
+- The straight line has VC dimension 3
+  - ricorda che basta UN set di 3 elementi; il caso dei tre punti allineati non è un problema -> (<https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension>)
+
+Don’t worry, frequently, in real cases, data are arranged in such a way that also a straight line is not so bad
+
+Also, problem of **generalization**:
+
+- we could imagine a perfect function that bends and curves as to classify correctly our dataset
+- but the perfect function for a dataset would not be suitable for new data
+
+One of the main tradeoffs for machine learning is to **balance the classification with generalization**
 
 - the more parameters our model has, the less general it is with other data
-- a good idea is to start with simple models
-- and then complicate as necessary
+- a good idea is to start with simple models, and then complicate as necessary
