@@ -3,6 +3,8 @@ A classifier algorythm is composed of two parts
 - the general schema is the same for every classifier
 - the parameters are learned through examples
 
+Chiamiamo **predictors** gli attributi degli individuals che vogliamo classificare
+
 How do we evaluate the performance of our model?
 
 - we can subdivide the data set in
@@ -34,3 +36,22 @@ One of the main tradeoffs for machine learning is to **balance the classificatio
 
 - the more parameters our model has, the less general it is with other data
 - a good idea is to start with simple models, and then complicate as necessary
+
+**Slide 12 molto importante**
+
+Accuracy is just the starting point for model evaluation
+
+- it's just one of the option
+- giusto per avere un idea preliminare, possiamo pensare che a volte è peggio sbagliarsi dicendo vero che falso mentre altre volte il contrario
+
+The model has two algorythms
+
+- one for training
+- one for executing
+  - tipically this one is much simpler, it just considers the parameters
+
+Two flavour of classification
+
+- crisp
+- probabilistic
+- we'll see that depending on the case, one can be more appropriate than the other
