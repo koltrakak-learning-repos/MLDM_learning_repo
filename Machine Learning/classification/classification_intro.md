@@ -15,12 +15,14 @@ even the best position of the straight line misclassifies some points
 
 - this decision function is limited
 
- **Vapnik-Chervonenkis Dimension**: Given a dataset with N elements there are 2^N possible different learning problems
+**Vapnik-Chervonenkis Dimension**: Given a dataset with N elements there are 2^N possible different learning problems
 
 - consideriamo solo due classi
 - il primo learning problem con tutti gli n elementi appartenenti alla prima classe, il secondo con tutti meno uno, ecc...
 
 If a model M is able to shatter (classificare correttamente) all the possible learning problems for at least one set of N elements, we say that it has Vapnik-Chervonenkis Dimension equal to N
+
+- shatter the dataset == dividere il dataset into subsets with homogeneous classes
 
 - The straight line has VC dimension 3
   - ricorda che basta UN set di 3 elementi; il caso dei tre punti allineati non è un problema -> (<https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension>)
