@@ -249,19 +249,14 @@ In practice
 No.
 Vuol dire solo che è un attributo fortemente predittivo nel dataset, non che causa la ricchezza.
 
-L’albero estrae correlazioni, non causalità.
+L’albero estrae relationships, non causalità.
+
 Dire “marital status → wealth” sarebbe una fallacia causale (confondendo correlazione con causalità).
 
 Messaggio chiave: i decision tree non dimostrano cause, solo relazioni predittive.
 
 3) Se un attributo non appare nell’albero, vuol dire che non influisce sulla ricchezza?
 
-Anche qui: no.
+qua si
 
-Un attributo può non apparire nell’albero per diversi motivi, ad esempio:
-
-- è ridondante (altro attributo spiega le stesse informazioni)
-- ha un effetto debole ma reale
-- è rilevante ma solo in combinazione con altri attributi (che l’albero non ha catturato)
-- l’albero è stato potato
-- il modello greedy ha fatto scelte locali che l’hanno escluso
+se l'albero cattura relazioni, questo significa che se un attributo non compare non ha una forte relazione predittiva con il target
