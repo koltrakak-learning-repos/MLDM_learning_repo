@@ -73,6 +73,20 @@ C is the penalty parameter (hyperparameter) that decides the importance of excep
 
 we add a dimension to linearly separate
 
+## Riassumendo
+
+- l'obiettivo è definire il maximum margin hyperplane che mi separa il meglio possibile i datapoint nel mio dataset
+- questo è un problema di ottimizzazione che si sa come risolvere efficentemente considerando l'inviluppo complesso di sottoinsiemi di punti e i relativi support vectors (non mi interessano troppo i dettagli)
+- Grazie al maximum margin hyperplane riduciamo l'overfitting, questo però funziona solo se i datapoint sono linearly separable.
+
+- Se i datapoint non sono linearly separable:
+  - possiamo considerare un softmargin e un iperparametro C che mi specifica la penalità
+  - oppure, possiamo utilizzare un mapping non lineare dei datapoint che aumenta la dimensionalità del mio dataset;  
+    - in altre parole, si passa al feature space
+    - Questo mapping che ci fà passare nel feature space è costoso e può essere evitate attraverso una famiglia di funzioni chiamate kernel functions.
+      - il passaggio a feature space attraverso queste funzioni viene chiamato kernel trick
+      - ogni kernel function ha il suo set di iperparametri distinto
+
 # Neural Networks
 
 by combining neurons we can define decision surfaces different from an hyperplane
