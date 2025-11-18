@@ -44,6 +44,7 @@ class DrawingApp:
 
         # DEBUG: mostra cosa sta entrando nella rete
         # print("random value in the middle of x:", x[200:])
+        print(x)
         plt.imshow(arr, cmap="gray")
         plt.show()
 

@@ -105,6 +105,13 @@ slide 118 importante:
   - tuttavia, se utilizziamo crossvalidation sull'intero dataset, siamo suscettibili ad overfitting degli iperparametri dato che stiamo utilizzando gli stessi dati per training and testing
   - posso fare uno split e fare crossvalidation sul training set e testare la mia nuova configurazione degli iperparametri con il test set
 
+**NB**: notare che crossvalidation è un buon metodo per la stima degli iperparametri.
+
+- se consideriamo il caso di gridsearch con holdout potrebbe capitare che una configurazione degli iperparametri risulti particolarmente buona solamente a causa di una istanza particolarmente fortunata del training set
+  - **la configurazione degli iperparametri sarebbe overfitted sul training set**
+- questo problema in gridsearch con crossvalidation viene mitigato dato che il training set è diverso per ogni fold
+  - facendo la media tra i risultati dei vari fold otteniamo un risultato più affidabile che ci permette di scegliere degli iperparametri più generali
+
 **NB**: The split should be as random as possible. Quando dividi un dataset in training, validation e test, l’obiettivo è che ogni insieme rappresenti bene la distribuzione reale dei dati e che non contenga bias dovuti all’ordine o ad altri fattori strutturali.
 
 Se non usi la casualità (per esempio, prendi i primi 80% dei dati per il training e gli ultimi 20% per il test), rischi che:
