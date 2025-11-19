@@ -119,6 +119,11 @@ Se non usi la casualità (per esempio, prendi i primi 80% dei dati per il traini
 - il modello “veda” solo un certo tipo di esempi in training,
 - e che il test contenga casi molto diversi → valutazione non realistica.
 
+**NB**: in generale l'obiettivo è ottenere misure nel training set e nel test set il più simili possibili.
+
+- questo mi garantisce che il modello riuscirà a generalizzare anche nel mondo reale
+- se avessi una accuracy nel test set molto diversa rispetto a quella del training set, ma comunque molto alta, quella misura non sarebbe per niente indicativa della accuracy nel mondo reale (che è quello che ci dovrebbe dire il test set)
+
 Attenzione però alla casualità:
 
 - It may happen that the proportion of classes in the supervised dataset X is altered in the Training and Test sets, to prevent such cases the statistical sampling technique of **stratification** ensures the maintenance of the proportion of classes
