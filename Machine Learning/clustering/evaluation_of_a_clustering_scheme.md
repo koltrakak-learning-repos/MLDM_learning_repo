@@ -74,9 +74,11 @@ Silhouette score è invece un buon clustering quality score:
 
 Viene da se che vogliamo un silhouette score positivo più grande possibile
 
-NB: elbows in the graph of inertia are a suggestion that that number of clusters is significant
+**NB**: elbows in the graph of inertia are a suggestion that that number of clusters is significant
 
-- one of these points is frequently a plausible value for K
+- inizialmente la distorsione cala velocemente dato che otteniamo facilmente vari cluster molto separati (ricorda che massimizzare la coesione è uguale a massimizzare la separazione)
+- quando la distorsione comincia a calare meno velocemente, significa che i nuovi cluster sono meno separati
+- one of these elbow points is frequently a plausible value for K
 
 ## Looking for the best number of clusters | elbow method
 
@@ -85,6 +87,8 @@ silhouette score seems more promising but it's more computationally intensive
 inizialmente possiamo usare l'elbow method con SSE
 
 se non c'è un clear elbow possiamo passare a silhouette score
+
+se silhouette score sono simili con varie configurazioni, una buona idea è considerare la configurazione con la distorsione minore
 
 # Partial supervision with gold standard
 
