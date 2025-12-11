@@ -38,8 +38,16 @@ Jaccard Coefficient
 - utile dato che dire che due datapoints don't have a property non significa che siano simili
 - di solito è utile quando il vettore binario è sparso (ovvero quando ci sono pochi uni)
 
+...
+
 #
 
 Rule of thumb:
+
 Manhattan: "How different are the values?"
+
+- Use Manhattan when rating scale/magnitude matters
+
 Cosine: "How similar are the patterns?"
+
+- Use Cosine when you care about proportional similarity, not absolute counts

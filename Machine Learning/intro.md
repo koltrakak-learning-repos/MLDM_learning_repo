@@ -1,3 +1,5 @@
+machine learning is the algorythmic part of the data mining process
+
 gli algoritmi che useremo saranno generali, nel senso che possono essere utilizzati senza modifiche in vari domini. Verranno specializzati caso per caso mediante ... [9:46]
 
 # Categorizzazione delle attività di machine learning
