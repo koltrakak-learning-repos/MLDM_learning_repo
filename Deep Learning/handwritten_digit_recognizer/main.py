@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
 import network
+import convolutional_network
 import mnist_loader
 import matplotlib.pyplot as plt
 
@@ -43,12 +44,11 @@ class DrawingApp:
         x, arr = preprocess_for_mnist(self.image)
 
         # DEBUG: mostra cosa sta entrando nella rete
-        # print("random value in the middle of x:", x[200:])
-        print(x)
         plt.imshow(arr, cmap="gray")
         plt.show()
 
-        out = self.net.feedforward(x)
+        # out = self.net.feedforward(x)
+        out = self.net.feedforward(arr) # per la convolutional gli passo la matrice
         digit = np.argmax(out)
 
         print("\nRisultato:", digit)
@@ -85,6 +85,5 @@ def preprocess_for_mnist(img):
     return arr.reshape(784, 1), arr  # ritorno anche 28x28 per debug
 
 if __name__ == "__main__":
-    training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-    net = network.Network.load("net.npz")
+    net = convolutional_network.Network.load("mnist_model.keras")
     app = DrawingApp(net)
