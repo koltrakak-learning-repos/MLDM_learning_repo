@@ -83,7 +83,7 @@ con Buisness Intelligence si intende l'unione di quanto elencato sopra
 
 ## OLAP based systems
 
-OLAP (On-Line Analytical Processing) technology is meant to allow an interactive analysis of multidimensional data from multiple perspectives.
+OLAP (On-Line Analytical Processing) technology is meant to allow an interactive analysis of multidimensional data from multiple perspectives (data cube).
 
 - analyzing something from multiple perspectives example:
   - we can think of a manager from a company that sells goods, they might want to look at the sales trends
@@ -117,8 +117,8 @@ The issue with big data is how to **extract value** from such massive amounts, a
 - Collectively analyze the broadening VARIETY of data
   - dati provenienti da sorgenti diverse possono avere:
     - struttura diversa: structured, unstructured, semi-structured
-    - formati diversi per le stesse informazioni -> preprocessing, data cleaning
-    - granularità diverse -> feature engineering
+    - formati e granularità diverse per le stesse informazioni -> preprocessing, data cleaning, feature engineering
+    - sorgenti diverse che vanno integrate -> transactions, logs, audio, video, email, chat, ...
     - ...
 
 These are the three Vs of big data
