@@ -28,7 +28,7 @@ The DFM is a conceptual model created specifically to function as data mart desi
 
 - Hierarchy
   - It is a directed tree whose nodes are dimensional attributes and whose arcs model **many-to-one associations between dimensional attribute pairs.**
-    - il lato 1 è quello più vicino al fatto;
+    - il lato 1 è quello più lontano dal fatto;
     - es: Date → Month → Year
       - per ogni data abbiamo un solo mese, che appartiene a un solo anno
   - It includes a dimension, positioned at the tree’s root and all of the dimensional attributes that describe it

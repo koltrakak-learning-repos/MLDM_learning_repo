@@ -2,9 +2,16 @@ Riprendiamo il concetto di Buisness intelligence:
 
 - abbiamo visto che è un termine ombrello che racchiude tutte le tecniche e tecnologie e sistemi informativi che abbiamo visto essere fondamentali per prendere decisioni
   - BI integrates across all these, providing a unified platform that collects ERP data, automates MIS reporting, enables DSS-style analysis, and presents EIS-level dashboards
-- **Transforming raw data into useful information to support effective and efficient business strategies.**
+- **Transforming huge amounts of raw data into useful information to support effective and efficient business strategies.**
 
 The Data Warehouse (DWH) is one of the main tool to support BI
+
+In particolare si collocano nel mezzo della BI pyramid, un diagramma che mostra come i dati grezzi vengano reduced and refined to capture their value and to derive decisions.
+
+- Si parte con le sorgenti di dati (Database OLTP)
+- queste vengono integrate in una data warehouse per analisi OLAP
+- i dati (preprocessed) presenti nel DW vengono utilizzati per fare data mining
+- utilizzando i modelli ottenuti si arriva alle decisioni, il nostro obiettivo
 
 # What is a Data warehouse?
 
@@ -120,12 +127,16 @@ ETL process extracts, integrates and cleans data from operational data sources, 
 
 The process consists of:
 
-- Accessing the data sources.
+- Accessing the data sources (Extraction).
+  - can be static -> popoliamo con uno snapshot delle sorgenti di dati
+  - o incremental -> recuperiamo solo a set of changes (dei diff) dalle sorgenti
 - Cleaning the data, as there may be missing values, duplicate value, inconsistencies (UNIBO e Unibo) or mistakes.
   - (non so perchè non c'è nella sigla)
   - **NB**: this operation is very costly and time consuming but leads to better data, and thus to better ML models, and thus to better insights
 - Transforming the data, as it may be too detailed or there may be different ways of representing data (e.g. decimals separated with a dot or a comma).
+  - tipicamente si fanno conversioni di formato o concatenazioni di due dati in un unico solo (es. nome e cognome)
 - Loading the data into the data warehouse
+  - similmente all'estrazione, possiamo fare refresh (sostituire tutto) o fare update (aggiornare con i diff)
   - **NB**: Since the ETL process is complex and time-consuming, data are loaded periodically in batches.
     - c'è una latenza prima che i dati presenti nelle sorgenti arrivino nella DW
   - As a result, a data warehouse usually contains historical, integrated and clean data, but not real-time data.
@@ -170,6 +181,12 @@ abbiamo tanta ridondanza dato che lo stesso dato viene immagazzinato in:
 - source layer
 - reconciled layer
 - data warehouse
+
+# Data warehouse advantages for data mining and machine learning
+
+- data is integrated from multiple sources and is easily accessible since it's in a single place
+- data is cleaned and consistent from the ETL process -> less preprocessing needed
+- lots of historical data useful for models that want to do predictions
 
 # Data warehouse drawbacks
 
