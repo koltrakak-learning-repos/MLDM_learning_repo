@@ -11,6 +11,8 @@ How do we evaluate the performance of our model?
 - a training set
 - a testing set
 
+# Decision functions
+
 even the best position of the straight line misclassifies some points
 
 - this decision function is limited
@@ -23,7 +25,6 @@ even the best position of the straight line misclassifies some points
 If a model M is able to shatter (classificare correttamente) all the possible learning problems for at least one set of N elements, we say that it has Vapnik-Chervonenkis Dimension equal to N
 
 - shatter the dataset == dividere il dataset into subsets with homogeneous classes
-
 - The straight line has VC dimension 3
   - ricorda che basta UN set di 3 elementi; il caso dei tre punti allineati non è un problema -> (<https://datascience.stackexchange.com/questions/32557/what-is-the-exact-definition-of-vc-dimension>)
 

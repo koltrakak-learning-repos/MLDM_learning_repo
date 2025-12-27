@@ -42,13 +42,13 @@ Problems to solve:
   - Se un simbolo è molto improbabile, porta più informazione → più bit per rappresentarlo
 - Entropia bassa = probabilità skewed
   - mi aspetto che mi arrivi il simbolo con probabilità più alta
-  - Se un simbolo è molto probabile, non porta quasi nessuna informazione nuova → pochi bit per rappresentarlr
+  - Se un simbolo è molto probabile, non porta quasi nessuna informazione nuova → pochi bit per rappresentarlo
 
-L’entropia è quindi la media pesata di “quanta informazione” portano i simboli, calcolata sulla loro probabilità
+**L’entropia è quindi la media pesata per probabilità di “quanta informazione” portano i simboli**
 
-**Perché c’è il logaritmo?**
+### Perché c’è il logaritmo?
 
-L'informazione di un evento con probabilità p è: I=−log_2(p)
+def: L'informazione di un evento con probabilità p è: I=−log_2(p)
 
 - Se p=1 → I=0 bit
   - (niente sorpresa: evento certo)
@@ -56,7 +56,7 @@ L'informazione di un evento con probabilità p è: I=−log_2(p)
 - Se p=1/8 → I=3 bit
   - (serve più informazione per descriverlo)
 
-Quindi l’entropia è: H(X) = **media pesata per probabilità dell’informazione dei simboli**
+Quindi l’entropia è: H(X) = **media pesata per probabilità dell’informazione dei simboli**
 
 - l'entropia misura quanta informazione produce in media la sorgente.
 - Quindi facciamo la media pesata: ogni simbolo contribuisce in proporzione a quanto spesso compare.
@@ -73,9 +73,12 @@ Considereremo l'entropia delle classi
 
 - In classification, low entropy of the class labels of a dataset means that it is there is low diversity in the labels
   - (i.e. the dataset has high purity, there is a majority class)
-- **We look for criteria that allow to split a dataset into subsets with higher purity**
-  - questo sarà il nostro test
-- Splitting the dataset in two parts according to a threshold on a numeric attribute the entropy changes, and **becomes the weighted sum of the entropies of the two parts**
+
+**We look for criteria that allow to split a dataset into subsets with higher purity**
+
+- questo sarà il nostro test
+
+Splitting the dataset in two parts according to a threshold on a numeric attribute the entropy changes, and **becomes the weighted sum of the entropies of the two parts**
 
 ### Information Gain
 
@@ -109,7 +112,7 @@ A questo punto abbiamo attributo e threshold
 - partition X according to the test outcomes
 - recursion on the partitioned data
 
-When do i stop the recursion?
+**When do i stop the recursion?**
 
 - when there's purity
 - when we can't get any positive information gain
@@ -117,8 +120,6 @@ When do i stop the recursion?
 **NB**: siccome stiamo considerando solo un attributo alla volta per i test, stiamo praticamente disegnando linee verticali/orizzontali per dividere il nostro dataset
 
 ## Algoritmo e complessità
-
-algoritmo è immediato
 
 per ogni nodo intermedio
 
@@ -134,7 +135,7 @@ per fare quanto detto sopra
 
 ho log(n) livelli
 
-Unendo i contributi ho la complessità dell'algoritmo
+Unendo i contributi ho la complessità dell'algoritmo che è O(D\*N\*log(N))
 
 Nota: L'implementazione scikit-learn parla di impurità al posto di entropia
 
@@ -155,7 +156,7 @@ The Gini Index is the total probability of wrong classification
 - facciamo finta di classificare a caso
 - For class j definiamo
   - frequency fp,j -> probabilità di prendere un elemento di classe j
-  - frequency of the other classes 1 ´ fp,j -> probabilità di prendere un elemento di classe diversa da j
+  - frequency of the other classes 1 - fp,j -> probabilità di prendere un elemento di classe diversa da j
   - probability of wrong assignment fp,j * (1-fp,j)
     - probabilità di prendere un elemento della classe j e di classificarlo come diverso da j
     - uguale anche viceversa
@@ -199,9 +200,10 @@ Overfitting happens when the learning is affected by noise
 - When a learning algorithm is affected by noise, the performance on the test set is (much) worse than that on the training set
 
 1. Presence of noise
-    - individuals in the training set can have bad values in the predicting attributes and/or in the class label, or can represent unusual cases in this case, the model is influenced from partly wrong or unusual training data
+    - individuals in the training set can have bad values in the predicting attributes and/or in the class label, or can represent unusual cases in this case
+    - the model is influenced from partly wrong or unusual training data
 2. Lack of representative instances (unbalanced dataset)
-    - some situations of the real world can be underrepresented, or not represented at all, in the training set this situation is quite common
+    - some situations of the real world can be underrepresented, or not represented at all, in the training set
 
 A good model has low generalization error i.e. it works well on examples different from those used in training
 
@@ -213,8 +215,10 @@ Pruning decision trees is a way of reducing overfitting.
 
 How do we prune?
 
-- se tagliamo troppo -> high bias -> we're considering only a few parameters as our predictors
-- se tagliamo troppo poco -> high variance -> we've learned noise
+- se tagliamo troppo -> high bias -> we're considering only a few parameters as our predictors == underfitting
+  - non fittiamo abbastanza il training set e quindi abbiamo un altro training error (che ricordiamo essere un lower bound dell'errore generale)
+- se tagliamo troppo poco -> high variance -> we've learned noise == overfitting
+  - non riusciamo a generalizzare e quindi seppure abbiamo un basso training error l'errore sul test set sarà alto
 
 ### hyperparameters
 
@@ -260,3 +264,5 @@ Messaggio chiave: i decision tree non dimostrano cause, solo relazioni predittiv
 qua si
 
 se l'albero cattura relazioni, questo significa che se un attributo non compare non ha una forte relazione predittiva con il target
+
+- **NB**: in questo senso i DT fanno automaticamente una feature selection! scegliendo gli attributi che forniscono il miglior information gain

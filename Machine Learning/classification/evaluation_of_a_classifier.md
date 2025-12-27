@@ -4,9 +4,7 @@ like any optimization problem, abbiamo una funzione obiettivo: accuracy del mode
 
 con model selection dobbiamo scegliere sia il modello sia i suoi iperparametri che massimizzano l'accuracy
 
-## Oil slick example
-
-attenzione a non ignorare false negatives
+Oil slick example: attenzione a non ignorare false negatives
 
 # Meaning of the test error
 
