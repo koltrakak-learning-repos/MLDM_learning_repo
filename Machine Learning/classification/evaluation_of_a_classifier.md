@@ -1,20 +1,14 @@
-# Model selection
-
-like any optimization problem, abbiamo una funzione obiettivo: accuracy del modello
-
-con model selection dobbiamo scegliere sia il modello sia i suoi iperparametri che massimizzano l'accuracy
-
-Oil slick example: attenzione a non ignorare false negatives
-
 # Meaning of the test error
 
-...
+Abbiamo già visto con i DT che **training set error is the lower bound of the error we can expect when classifying new data**
 
-L’errore del test set come stima dell’errore reale
+Abbiamo anche visto che usiamo l’errore del test set come stima del run time error
 
-- If the test set error ratio is x, we should expect a run-time error x ± ???
-- Hai un valore osservato di errore sul test set, chiamato x.
-- Ma vuoi sapere quanto fidarti di questo valore: cioè, quanto può variare rispetto al “vero” errore reale (sul mondo intero).
+- ci interessa più che altro un ***upper bound del run time error***
+- **If the test set error ratio is x, we should expect a run-time error x ± ???**
+  - quanto fidarsi del training error? quanto può variare rispetto al runtime error?
+
+Usiamo metodi statistici!
 
 Il simbolo x ± ??? rappresenta l’intervallo di confidenza, cioè un range di valori dentro cui ci aspettiamo che cada il vero errore, con una certa probabilità (ad esempio 95%).
 
@@ -23,35 +17,50 @@ Ogni predizione può essere vista come un esperimento Bernoulliano:
 - Successo = predizione corretta
 - Fallimento = errore
 - Se hai N elementi nel test set, hai N esperimenti indipendenti con probabilità di successo p (cioè probabilità che il modello indovini).
-- f = errore empirico = S / N; con S = numero di errori nel test set
+- f = errore empirico = S / N; con **S = numero di errori nel test set**
   - è una stima della vera probabilità di errore p
 
-La differenza tra f (errore osservato) e p (errore reale) è dovuta al rumore statistico.
+è chiaro che p (errore reale) non è esattamente uguale ad f (errore osservato)
 
-- Se il test set è grande (N ≥ 30), la distribuzione del rumore può essere approssimata con una distribuzione normale (grazie al teorema del limite centrale).
-- Abbiamo la conferma guardando la formula: abbiamo un N a denominatore. Questo significa che maggiore è la dimensione del test set, minore è l'incertezza del mio intervallo di confidenza (+- part)
+- magari il test set non è perfettamente rappresentativo dei dati che verranno osservati a run-time
+  - vedi dimensione del test set troppo piccola
+- tutte le cause che portano a differenza tra f e p vengono raggrupato in un **rumore statistico.**
+  - cominciamo ad intravedere un qualcosa con cui fare +-
 
-Definiamo quindi un intervallo di confidenza in cui ricade p con un certo livello di confidenza (1-alpha)
+Se il test set è grande (N ≥ 30), la distribuzione del rumore può essere approssimata con una distribuzione normale (grazie al teorema del limite centrale).
 
-- Il **pessimistic error** si ottiene prendendo il valore più alto dell’intervallo (+ invece di ±) e, come dice il nome, rappresenta la stima pessimistica della mia probabilità di errore p
-- Il pessimistic error è l'error che è bene utilizzare nella stima della bontà di un modello
+- Abbiamo la conferma guardando la formula: abbiamo un N a denominatore.
+- Questo significa che maggiore è la dimensione del test set, minore è l'incertezza del mio intervallo di confidenza (+- part piccola)
 
-slide 105 ci dice che:
+Definiamo quindi un intervallo di confidenza centrato in f in cui ricade p con un certo livello di confidenza (1-alpha)
 
-- se voglio un higher confidence level (1-alpha piccolo)
-- l'errore pessimistico è più grande (l'intervallo di confidenza cresce)
-- se però facciamo crescere la dimensione del test set N, la differenza tra confidence level diversa si attenua
-- inoltre l'errore diminuisce in termini assoluti
+- where α is typically .05 or 0.01
+- il livello di confidenza di questo intervallo (1-alpha) ci dice la probabilità che p (true error frequency) ricada in questo intervallo centrato in f
+
+Il **pessimistic error** si ottiene prendendo il valore più alto dell’intervallo (+ invece di ±) e, come dice il nome, rappresenta la stima pessimistica della mia probabilità di errore p
+
+- Il pessimistic error è l'errore che è bene utilizzare nella stima della bontà di un modello
+
+Alcune conseguenze di questa modellazione statistica:
+
+- se voglio un higher confidence level (1-alpha grande)
+  - l'intervallo di confidenza cresce
+  - e quindi anche l'errore pessimistico cresce
+- al contrario, se mi basta una confidenza minore
+  - l'intervallo di confidenza si stringe così come l'errore pessimistico
+- in entrambi i casi, se facciamo crescere la dimensione del test set N,
+  - l'intervallo di confidenza e quindi l'errore pessimistico diminuiscono
+  - (inoltre, la differenza tra confidence level diversa si attenua)
 
 **riassumendo**:
 
-Hai ottenuto un errore empirico f dal test set. Ma vuoi sapere quanto è affidabile questa stima.
+Hai ottenuto un errore empirico f dal test set ma vuoi sapere quanto è affidabile questa stima.
 
-Costruisci un intervallo di confidenza intorno a f, che ti dice: “Con probabilità 1 − α (es. 95%) il vero errore reale p cade dentro questo intervallo.”
+Costruisci un intervallo di confidenza intorno a f imponendo un certo livello di confidenza
 
-Esempio numerico
+- questo ti dice: “Con probabilità 1 − α (es. 95%) il vero errore reale p cade dentro questo intervallo.”
 
-Supponi:
+Esempio numerico:
 
 - N = 1000 esempi nel test set
 - f = 0.08 (8% di errore)
@@ -61,54 +70,92 @@ Usando la formula del Wilson interval: Errore reale p ∈ [ 0.065 , 0.097 ]
 
 cioè: “Stimiamo che l’errore reale sia 8%, ma con il 95% di confidenza è tra 6.5% e 9.7%.”
 
-## pruning
+# Model selection for a classifier | train/test process
 
-**statistical pruning**:
-i nodi profondi hanno N piccolo e quindi più incertezza
+the model selection includes the selection of the learning algorithm and its (hyperparameter) optimisation
 
-però possiamo fare anche in maniera più ignorante
-
-# Dataset splits
-
-misure di accuracy vengono utilizzate in due modi:
+accuracy (e altre misure) vengono utilizzate in due modi:
 
 - ottimizzazione:
   - otteniamo una misura con cui confrontare modelli diversi e configurazioni diverse degli iperparametri
 - performance:
   - ottenere una stima di quanto il nostro modello sbaglia
 
-slide 118 importante:
+è chiaro che vogliamo che le misure che usiamo per le valutazioni del nostro modello siano il più possibile affidabili e rappresentative delle performance a runtime.
 
-- train/test split
-  - semplice e veloce
-  - non molto reliable dato che ci sono poche entry nel test set
-  - Bisogna trovare un tradeoff tra training set e test set
-    - più entry ci sono nel training set, meglio il modello impara
-    - più entry ci sono nel test set, migliore è la stima dell'errore
-- train/validation/test split
-  - Alleni il modello sul training set.
-  - Misuri l’errore sul validation set.
-  - Cambi iperparametri (es. learning rate, profondità, ecc.) finché le prestazioni migliorano.
-  - Quando hai trovato la configurazione migliore, testi una sola volta sul test set per stimare l’errore reale.
-- **crossvalidation**
-  - Cross-validation ti permette di riutilizzare tutti i dati sia per allenare che per testare (validare), ma in momenti diversi.
-    - Così ottieni una stima stabile dell’errore senza sacrificare dati.
-  - ogni elemento del dataset viene usato:
-    - number of subsets - 1 volte per il training
-    - una volta per il testing
-  - optimal use of the supervised data
-  - **NB**: the error generated by crossvalidation is more reliable (less uncertainty), less prone to randomness (facciamo una media)
-    - crossvalidation serve ad ottenere una stima dell'errore più certa
-- **NB**: nella stima degli iperparametri potremmo applicare crossvalidation con varie configurazioni degli iperparametri in maniera da trovare la configurazione migliore.
-  - tuttavia, se utilizziamo crossvalidation sull'intero dataset, siamo suscettibili ad overfitting degli iperparametri dato che stiamo utilizzando gli stessi dati per training and testing
-  - posso fare uno split e fare crossvalidation sul training set e testare la mia nuova configurazione degli iperparametri con il test set
+A questo scopo abbiamo a disposizione diverse strategie con cui fare train e test tutte però con questi elementi in comune:
+
+- several train/test loops are in general necessary to find the best set of values for the hyperparameters
+- train and test should be done using different portions of the supervised data available
+- in every step the data should be representative of the data that will be classified run–time
+  - **NB**: It may happen that the proportion of classes in the supervised dataset X is altered in the Training, validation and Test sets, to prevent such cases the statistical sampling technique of **stratification** ensures the maintenance of the proportion of classes
+  - stratify=y in scikit-learn
+
+## holdout method | train/test split
+
+- semplice e veloce
+- Bisogna trovare un tradeoff tra training set e test set
+  - più entry ci sono nel training set, meglio il modello impara
+  - più entry ci sono nel test set, migliore è la stima dell'errore
+- non permette tuning degli iperparametri
+  - se controllo solo cosa mi migliora ler performance sul test set, sto overfittando gli iperparametri sul quello specifico test set
+
+## holdout method | train/validation/test split
+
+- Alleni il modello sul training set.
+- Misuri l’errore sul validation set.
+- Cambi iperparametri (es. learning rate, profondità, ecc.) finché le prestazioni migliorano.
+- Quando hai trovato la configurazione migliore, testi una sola volta sul test set per stimare l’errore reale.
+
+## crossvalidation
+
+Cross-validation serve ad ottenere una stima dell'errore più affidabile, utilizzando in maniera più efficace l'intero dataset. Tutti i dati vengono usati sia per allenare che per testare, ma in momenti diversi.
+
+- dividiamo il dataset in k folds e facciamo k iterazioni di train con test
+  - ad ogni iterazione cambiamo la fold con cui facciamo il test
+- ad ogni permutazione di fold otteniamo una stima dell'errore
+- finite le k iterazioni, abbiamo k stime dell'errore
+  - questi diversi errori sono stati ottenuti guardando diverse porzioni dell'intero dataset
+  - facendone la media è più o meno come se avessimo usato l'intero dataset come test set
+  - otteniamo una stima dell'errore più affidabile rispetto ad holdout method che considera solo una porzione del dataset nel test set
+    - anche se dovrebbe essere comunque rappresentativa dell'intero dataset con stratification
+- ottenuta la stima dell'errore, possiamo utilizzare l'intero training set per fare un ultimo training ed ottenere un modello leggermente migliore
+
+ogni elemento del dataset viene usato:
+
+- k-1 volte per il training
+- e una volta per il testing
+- optimal use of the supervised data
+
+- **NB**: the error generated by crossvalidation is more reliable since it's less prone to randomness/configurazioni fortunate/sfortunate nel test set (facciamo una media)
+
+**NB**: Nell'ottimizzazione degli iperparametri si potrebbe pensare di applicare crossvalidation tante volte con varie configurazioni degli iperparametri in maniera da trovare la configurazione migliore.
+
+- tuttavia, se utilizziamo crossvalidation sull'intero dataset, siamo suscettibili ad overfitting degli iperparametri come lo eravamo nel caso del semplice train/test split
+- come prima stiamo utilizzando gli stessi dati per training and testing finale, potrei quindi star ottimizzando gli iperparametri per questa mia specifica istanza di dataset senza accorgermi di non star generalizzando
+
+## crossvalidation only on the training set
+
+La soluzione è quella di introdurre di nuovo un test set che verrà utilizzato solo alla fine
+
+- faccio un train/test split
+- per ogni configurazione di iperparametri che voglio testare applico crossvalidation sul training set
+  - stavolta ho dei fold di validation e non di test
+  - ho le stesse proprietà di prima ma sul validation error
+    - ho un validation error più affidabile dato che è stato ottenuto come media sull'intero training set
+    - meno probabile che io ottenga un validation error alto/basso a causa di validation set sfortunato/fortunato
+- scelgo la configurazione degli iperparametri che mi da crossvalidation error minore e alleno il modello finale sull'intero training set
+- alla fine di tutto faccio l'ultima verifica di performance sul test set che ho messo da parte così da **ottenere una misura delle performance del modello veritiera anche per il mondo reale, su cui posso fare affidamento per capire se il modello sta generalizzando**
 
 **NB**: notare che crossvalidation è un buon metodo per la stima degli iperparametri.
 
-- se consideriamo il caso di gridsearch con holdout potrebbe capitare che una configurazione degli iperparametri risulti particolarmente buona solamente a causa di una istanza particolarmente fortunata del training set
-  - **la configurazione degli iperparametri sarebbe overfitted sul training set**
-- questo problema in gridsearch con crossvalidation viene mitigato dato che il training set è diverso per ogni fold
+- se consideriamo il caso di gridsearch con holdout potrebbe capitare che una configurazione degli iperparametri risulti particolarmente buona solamente a causa di una istanza particolarmente fortunata del test set
+  - **la configurazione degli iperparametri sarebbe overfitted sul test set**
+- questo problema in gridsearch con crossvalidation viene mitigato dato che il test set è diverso per ogni fold
   - facendo la media tra i risultati dei vari fold otteniamo un risultato più affidabile che ci permette di scegliere degli iperparametri più generali
+  - crossvalidation riduce per sua natura l'overfitting degli iperparametri su validation/test set dato che quest'ultimi diventano molto grandi
+- se tengo un test set da parte posso anche anche accorgermi se sto overfittando gli iperparametri sul validation set
+  - avrei una performance sul validation set che non si traduce nel test set
 
 **NB**: The split should be as random as possible. Quando dividi un dataset in training, validation e test, l’obiettivo è che ogni insieme rappresenti bene la distribuzione reale dei dati e che non contenga bias dovuti all’ordine o ad altri fattori strutturali.
 
@@ -120,63 +167,81 @@ Se non usi la casualità (per esempio, prendi i primi 80% dei dati per il traini
 **NB**: in generale l'obiettivo è ottenere misure nel training set e nel test set il più simili possibili.
 
 - questo mi garantisce che il modello riuscirà a generalizzare anche nel mondo reale
-- se avessi una accuracy nel test set molto diversa rispetto a quella del training set, ma comunque molto alta, quella misura non sarebbe per niente indicativa della accuracy nel mondo reale (che è quello che ci dovrebbe dire il test set)
+- se avessi una accuracy nel test set molto diversa rispetto a quella del training set, ma comunque molto alta, quella misura non sarebbe per niente indicativa della accuracy nel mondo reale
+- **quanto le performance su training set sono molto diverse rispetto a quelle sul test set, questo è il caso di overfitting**
+  - quando si applica regularization in genere si tende a far avvicinare training error e test error, aumentando train error e diminuendo test error
 
-Attenzione però alla casualità:
+## Tirando alcune somme su model selection
 
-- It may happen that the proportion of classes in the supervised dataset X is altered in the Training and Test sets, to prevent such cases the statistical sampling technique of **stratification** ensures the maintenance of the proportion of classes
-- stratify=y in scikit-learn
+in pratica se si vuole fare tuning degli iperparametri le alternative sono due: holdout o crossvalidation
 
-Con crossvalidation, ci si potrebbe chiere quale delle k istanze del modello usare. La risposta è: non esiste una “singola istanza” del modello
+- crossvalidation è migliore in caso di dataset piccoli perché permette di evitare un validation set troppo piccolo il che riduce la probabilità di scegliere iperparametri overfittati sulla specifica istanza di validation set
+- con dataset grandi, la differenza tra CV e semplice split si riduce molto dato che il validation set è sufficientemente grande
+  - in questo caso conviene holdout dato che richiede meno iterazioni e addestramenti
 
-- ne addestri una nuova in ogni fold (quindi k istanze diverse se fai k-fold cross-validation).
+---
 
-- Cosa succede in ogni fold
-  - Dividi il dataset in k parti (fold).
-  - Per ciascun fold i:
-    - Addestri una nuova istanza del modello sui k−1 fold di training.
-    - Valuti quella istanza sul fold i (il test di turno).
-  - Quindi se usi, ad esempio, k=5:
-    - Allenerai 5 modelli distinti (ognuno addestrato su un sottoinsieme leggermente diverso dei dati).
-    - Ottieni 5 misure di errore (una per ciascun modello).
-    - Calcoli la media → stima complessiva dell’errore di generalizzazione.
+# Performance measures
 
-- Quindi quale modello “uso davvero” alla fine?
-  - Caso A: vuoi solo stimare l’errore del modello
-    - Scopo: valutare la qualità attesa del modello e non ancora usarlo per fare previsioni reali.
-    - Usi tutte le k istanze solo per calcolare l’errore medio. Poi le scarti.
-    - Dopo la CV, addestri una nuova istanza finale del modello su tutto il dataset (train+test combinati).
-    - ora puoi sfruttare tutti i dati disponibili per la versione definitiva del modello dato che hai già calcolato l'accuracy con la crossvalidation
-  - Caso B: stai scegliendo il miglior modello / iperparametri
-    - Scopo: trovare il modello o la configurazione migliore.
-    - Usi cross-validation per confrontare diversi modelli (o set di iperparametri).
-    - Scegli la combinazione con l’errore medio più basso.
-    - Poi riaddestri un’unica istanza del modello su tutto il dataset usando quei parametri ottimali.
+la più semplice è l'accuracy
 
-## Model selection
+questo permette di introdurre anche **confusion matrix**
 
-in breve prova modelli diversi e prendi il migliore
+Accuracy non è sufficiente come unica misura. A classification error can have different consequences, depending on the class of the individual
 
-# Kinds of accuracy measures
+- when forecasting an illness a false positive can be less dangerous than a false negative
+- consider the cost of retiring a machinery as damaged, while it is ok (false positive) is certainly preferable than the cost of an unpredicted failure (false negative)
 
-confusion matrix
+**Abbiamo bisogno di altre misure che tengono più in conto di false negative/false positives**
 
-... optimizing f1-score means balancing precision and recall
+- Precision: TP/(TP+FP)
+  - the rate of true positives among the positive classifications
+  - alto quando non classifico come positivi individui che non lo sono
+- Recall: TP/(TP+FN)
+  - the rate of true positives that i can catch
+  - alto quando non classifico come negativi individui che non lo sono
+- F1-score: 2*(prec*rec)/(prec+rec)
+  - grande quando precision e recall sono simili (non sbilanciati)
+  - alto quando ho pochi FP e FN, ovvero quando catturo la maggior parte dei casi positivi senza avere tanti FP
 
-what measure should we use
+## what measure should we use
 
-multiclass case
+Accuracy gives an initial feeling of the effectiveness of the classifier, but **can be heavily misleading when classes are highly imbalanced**
 
-...
+- potrei sbagliare sempre le classi poco rappresentate
 
-if we want to use scikit learn functions like gridsearch to optimize something other than accuracy in a multiclass model we need a sort of average value of the measure for the classes
+If the the costs of errors on positives and negatives are significantly different, then it is necessary to evaluate precision and recall.
 
-- if the classes are balanced it doesn't really matter
+F1-score sempre interessante perchè mi da un'idea di quanto precision e recall siano bilanciati
+
+## Multiclass case
+
+Quando ho più di due classi si estende la confusion matrix aggiungendo oltre alle predizioni corrette le predizioni sbagliate e con quale classe è stata sbagliata
+
+- es: FP_a-b ho predetto b al posto di a
+- **NB**: adessono abbiamo solo true prediction (TP) e false prediction (FP); non abbiamo più false negatives
+
+Accuracy adesso diventa:
+
+- accuracy  = sum_su_tutte_le_classi(TP) / N
+
+Le altre misure di performance adesso vanno distinte da classe a classe
+
+- precision = TP_i / P_i
+- recall    = TP_i / T_i
+- f1-score uguale a prima
+
+Abbiamo un problema, if we want to use scikit learn functions like gridsearchcv to optimize something other than accuracy in a multiclass model **we need a sort of average value of the measure for the classes**
+
+- we need a single value to optimize
+- if the classes are balanced it doesn't really matter, we can choose media aritmetica della misura across classes (macro avg)
 - if they are unbalanced it matters
 
 macroaverage da la stessa importanza a tutte le classi; underepresented o meno
 
-weighted average mi permette di dare meno importanza alle classi meno rappresentate
+weighted average fa una media pesata degli score across classes con peso pari alla frequenza della classe nel dataset
+
+- mi permette di dare meno importanza alle classi meno rappresentate
 
 microaverage ci interessa di meno
 
@@ -186,40 +251,48 @@ microaverage ci interessa di meno
 
 is our classifier making correct predictions by chance?
 
+Example: early diagnosis
+
+- let us consider a disease affecting 2% of patients
+- a prediction saying always “no disease” has 98% precision, which, in general would be a good result
+- è chiaro però che questo classifier è inutile
+
 ...
 
-definiamo un random classifier che produce la stessa proporzione di classi di C
-
-definiamo k(C)
+definiamo il Cohen k-score di un classifier C: k(C)
 
 - un altra misura (insieme ad accuracy, precision, ...) che ci permette di trovare la miglior configurazione degli iperparametri per i nostri scopi
-
-nell'esempio della malattia: se C ha accuracy 98% -> k(c) = 0
+- misura che varia da -1 a 1;
+  - se >0 siamo migliori rispetto al random assignment; se <0 siamo peggiori
+  - se = 1 siamo perfetti
+- nell'esempio della malattia: se C ha accuracy 98% -> k(c) = 0
 
 k score becomes good after 0.6
 
-MCC non ci interessa
-
 ## Cost sensitive learning
 
-if we have more information such as
+if before training we have more information such as
 
 - the cost of errors
 - the cost of good prediction
 - the cost of bad prediction
 
-we can define our own error measures (cost function)
+we can influence the training of our models to try to reduce the more costly errors
 
-Several alternatives ma quella che ci interessa:
-alterate the proportion of classes in the supervised data, duplicating the examples for which the classification error is higher
+Several alternatives:
 
-- In this way, the classifier will became more able to classify the classes for which the classification error cost is higher
-- This solution is useful also when the classes are imbalanced, that is the frequencies of the class labels in X are not equal
+- alterate the proportion of classes in the supervised data, duplicating the examples for which the classification error cost is higher
+  - In this way, the classifier will became more able to classify the classes for which the classification error cost is higher
+  - This solution is useful also when the classes are imbalanced, that is the frequencies of the class labels in X are not equal
+- alcuni algoritmi di training permettono di dare un peso alle classi più importanti
+  - class_weight nei DT permette di definire dei pesi per le classi che definiscono quali sono le classi più importanti da classificare correttamente
+  - questo influenza il training (calcolo dell'impurità di un nodo immagino)
 
 # Evaluation of a Probabilistic classifier
 
-interessante utilizzare la probabilità predetta come strumento di ranking quando si lavora in batch-mode
+Many classifiers produce, rather than a class label (crisp prediction), a tuple of probabilities, one for each possible class, (probabilistic, or soft prediction)
 
+- interessante utilizzare la probabilità predetta come strumento di ranking quando si lavora in batch-mode
 - ho un batch di oggetti, filtro solo quelli che hanno una probabilità che rispetta una threshold ed ottengo un subset
 
 ### Lift chart

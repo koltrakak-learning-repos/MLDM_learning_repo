@@ -20,7 +20,7 @@ l'evidence è una serie di attributi con determinati valori
 
 noi siamo interessati a P(H|E) -> la probabilità di una classe dati quei valori degli attributi
 
-**IMPORTANTE**: facciamo l'ipotesi (facilemente non vera) che gli attributi sono tutti indipendenti e quindi la probabilità che due attributi abbiano determinati valori è il prodotto delle probabilità
+**IMPORTANTE**: facciamo l'ipotesi (facilemente non vera) che, data una classe, gli attributi sono tutti indipendenti e quindi la probabilità che due attributi abbiano determinati valori è il prodotto delle probabilità
 
 - per questo motivo si chiama naive, l'assunzione è molto simplicistica, però funziona!
 
@@ -29,8 +29,10 @@ attributi con valore 0 fanno crollare la probabilità di una determinata classe 
 
 - per risolvere applichiamo Laplace smoothing
 
-Problema:
+**Problema**:
 se ho dei valori reali non posso calcolarne la frequenza
+
+- per risolvere calcoliamo media e varianza e calcoliamo le probabilità di un valore con la funzione di densità di probabilità della relativa gaussiana
 
 # Linear Perceptron
 
@@ -78,7 +80,6 @@ we add a dimension to linearly separate
 - l'obiettivo è definire il maximum margin hyperplane che mi separa il meglio possibile i datapoint nel mio dataset
 - questo è un problema di ottimizzazione che si sa come risolvere efficentemente considerando l'inviluppo complesso di sottoinsiemi di punti e i relativi support vectors (non mi interessano troppo i dettagli)
 - Grazie al maximum margin hyperplane riduciamo l'overfitting, questo però funziona solo se i datapoint sono linearly separable.
-
 - Se i datapoint non sono linearly separable:
   - possiamo considerare un softmargin e un iperparametro C che mi specifica la penalità
   - oppure, possiamo utilizzare un mapping non lineare dei datapoint che aumenta la dimensionalità del mio dataset;  
@@ -96,7 +97,7 @@ by combining neurons we can define decision surfaces different from an hyperplan
 there is a huge difference between NNs and DTs. The latter are understandable whereas the former are not.
 
 - in DTs the nodes are decisions
-- in NNs the nodes are numeri processors
+- in NNs the nodes are numeric processors
 
 ## Universal approximator
 
@@ -114,11 +115,12 @@ choose the class of the majority of the k-nearest neighbours
 
 the model is the training set itself
 
-ci sono degli iperparametri
+ci sono degli iperparametri:
 
 - quanto lontano guardo?
 - k
 - metrica con cui misurare la distanza
+  - Mahalanobis distance funziona bene dato che tiene conto della varianza degli attributi
 
 # From a binary classifier to multi-class classification
 
@@ -131,7 +133,7 @@ Two ways to deal with multi–class classification:
 - use a **set of binary classifiers** and combine the results
   - at the expenses of an increased number of problems to solve
 
-**OVO**
+**OVO (one vs one)**
 consider all the possible pairs of classes and generate a binary classifier for each pair
 
 - C*(C-1)/2 pairs
@@ -145,7 +147,7 @@ at prediction time apply a voting scheme
   - molte coppie non considerano neanche la classe corretta tra le due tra cui distinguono e quindi emetteranno un risultato per forza sbagliato
   - poco male, l'importante è che le C-1 coppie che contengono la classe corretta classifichino correttamente
 
-**OVR**
+**OVR (one vs rest)**
 consider C binary problems where class c is a positive example, and all the others are negatives
 
 - build C binary classifiers, dove ognuno impara a distinguere tra: "questo è c, questo non è c"
@@ -165,7 +167,9 @@ at prediction time apply a voting scheme
 
 the quality of many INDIPENDENT classifiers, is better than that of one single classifiers
 
-- that's what probability tells us (vedi slide 110)
+- that's what probability tells us
+  - la probabilità di sbagliare 10 volte di fila e è il prodotto delle probabilità di errore singole -> si attenuano
+  - (vedi slide 110)
 
 - if the base classifiers are equal (the same classifier), the ensemble error rate is still epsilon
   - tutti mi danno lo stesso risultato

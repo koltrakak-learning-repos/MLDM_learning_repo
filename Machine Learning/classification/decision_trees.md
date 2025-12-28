@@ -191,6 +191,8 @@ error_train(h) < error_train(h')
 error_X(h) > error_X (h') ; con X = intero dataset
 ```
 
+**In pratica overfittiamo quando esiste un'altra parametrizzazione che fitta peggio i dati (training error maggiore) ma che generalizza meglio (test error migliore)**
+
 L'idea è che il modello si è troppo parametrizzato per il training set (che può, ad esempio, non essere bilanciato) e non riesce a generalizzare su new data
 
 ## Cause di overfitting
