@@ -109,6 +109,8 @@ A questo scopo abbiamo a disposizione diverse strategie con cui fare train e tes
 
 ## crossvalidation
 
+By partitioning the available data into three sets, we drastically reduce the number of samples which can be used for learning the model, and the results can depend on a particular random choice for the pair of (train, validation) sets.
+
 Cross-validation serve ad ottenere una stima dell'errore più affidabile, utilizzando in maniera più efficace l'intero dataset. Tutti i dati vengono usati sia per allenare che per testare, ma in momenti diversi.
 
 - dividiamo il dataset in k folds e facciamo k iterazioni di train con test
