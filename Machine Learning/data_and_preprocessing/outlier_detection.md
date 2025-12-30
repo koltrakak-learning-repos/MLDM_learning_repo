@@ -15,4 +15,4 @@ is this a supervised or an unsupervised task?
 
 - it can be both
 - of course if we have labelled examples of outliars its better (we only have the problem of unbalanceness)
-- in most cases we're in an unsupervised setting
+- in most cases we're in an unsupervised setting because supervised data is expensive

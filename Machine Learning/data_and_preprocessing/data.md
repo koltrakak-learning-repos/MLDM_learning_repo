@@ -28,10 +28,11 @@ descriptive statistics = measures that describe status of something -> stuff lik
 
 2. Numerical: numeri
     - interval
-        - the difference is meaningful (possiamo misurare distanze e definire intervalli) but they don't have a univocal zero
+        - **the difference is meaningful** (possiamo misurare distanze e definire intervalli) but they don't have a univocal zero
         - temperatures
             - Zero is an arbitrary value, hence, 0°C and 0°F indicate different temperatures.
-            - Given two temperatures t1=10°C and t2=12°C it does not have any sense to say that their relative difference is 20%, **changing the scale the relative difference would change**
+            - Given two temperatures t1=10°C and t2=12°C it does not have any sense to say that their relative difference is 20%
+            - **changing the scale the relative difference would change**
     - ratio
         - hanno uno zero univoco, ha quindi senso misurare dei ratio
         - lunghezze, masse

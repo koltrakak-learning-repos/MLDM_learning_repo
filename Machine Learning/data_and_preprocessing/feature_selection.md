@@ -9,7 +9,7 @@ why is it used?
     - It can reduce the complexity of a model and makes it easier to interpret (eg. with visualizations)
     - It can improve the accuracy of a model if the right subset is chosen
     - **It can reduce overfitting**
-        - eliminando feature non importanti quest'ultime non possono venire imparate e non possono portare a predizioni sbagliate
+        - eliminando feature non importanti/non predittive quest'ultime non possono venire imparate e non possono portare a predizioni sbagliate
 
 2. Some attributes can be problematic
     - may be redundant if correlation between the two is high
@@ -29,10 +29,9 @@ al crescere del numero di features (dimensionalità), algoritmi che discriminano
 Innanzitutto, possiamo sicuramente:
 
 - eliminare attributi ridondanti
-  - sia quelli fortemente correlati che quelli derivabili da altri
+  - sia quelli fortemente correlati tra di loro, che quelli derivabili da altri
 - eliminare gli attributi irrilevanti, ovvero quelli che non hanno alcun poter predittivo sul target (vedi codice fiscale e ricchezza)
 - eliminare attributi con poco variabilità
-  - è quello che fa PCA
   - se è un attributo è più o meno sempre uguale across l'intero dataset allora non serve a molto
 
 Da qui in avanti comincia la parte più di machine learning
@@ -50,7 +49,8 @@ feature selection può essere un'attività sia unsupervised che supervised
   - Decision Trees (usano gli attributi che massimizzano l'information gain)
   - Lasso (L1)
   - Elastic Net
-- **NB**: in quanto supervised tutti questi metodi richiedono le label della target class
+
+**NB**: in quanto supervised tutti questi metodi richiedono le label della target class
 
 **Unsupervised:**
 
@@ -61,7 +61,7 @@ feature selection può essere un'attività sia unsupervised che supervised
   - Rimuovi una feature
   - Rifai clustering
   - Se la qualità non peggiora (o migliora) → la feature è inutile
-  - **NB**: questo è un unsupervised wrapper method dato che usa kmenas come valutatore del subset di feature
+  - **NB**: questo è un unsupervised wrapper method dato che usa kmeans come valutatore del subset di feature
   - **NB**: Nel supervised dici: “Questa feature è utile perché discrimina le classi” Nel clustering dici invece: “Questa feature è utile perché aiuta a mantenere separati i gruppi naturali di dati”
 - Oppure possiamo sfruttare **PCA**
   - questa non è propriamente feature selection, è una combinazione di feature transformation e dimensionality reduction
@@ -76,7 +76,7 @@ Filter e Wrapper — rappresentano due grandi famiglie di tecniche per questo sc
 
 I filter **selezionano le feature prima dell’applicazione di qualsiasi algoritmo machine learning.**
 
-- Esempio: Correlation-based selection -> si scelgono le feature più correlate con la target.
+- Esempio: Correlation-based selection -> si scelgono le feature più correlate con il target.
 
 **Wrapper approaches**:
 
@@ -113,7 +113,7 @@ We're going to use correlation this way:
 
 - Identifying Redundant Features for Dimensionality reduction
   - Features highly correlated with each other contain overlapping information
-  - Retain one feature from such groups to reduce dimensionality
+  - Retain one feature from such groups to reduce dimensionality and overfitting
 
 - Identifying Relevant Features (filtering)
   - High correlation with the target variable helps identify features with high predictive power
