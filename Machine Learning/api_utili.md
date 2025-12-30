@@ -11,6 +11,9 @@
 
 ## Dataframe
 
+- df.shape
+  - .shape\[0] per numero di righe, shape\[1] per numero di colonne
+
 - df.describe(include="all")
   - fornisce informazioni utili come count, nunique, max e min con cui puoi vedere se ci sono dei missing values e roba
 
@@ -32,6 +35,10 @@
   - copia profonda del df
   - conviene farle in modo da poter confrontare i cambiamenti senza refreshare jupyter
   - fai df2, df3, ...
+
+- df.dropna()
+  - per droppare le righe che contengono un null
+  - puoi fare così `df.shape[0] - df.dropna().shape[0]` per controllare quante righe null c'erano
 
 - df.drop()
   - Drop columns  -> df.drop(['B', 'C'], axis=1)
@@ -62,6 +69,10 @@
 
 - results.loc\[results.scoring=="accuracy","accuracy"]
   - posso usare loc anche per ottenere una serie da una colonna di un dataframe fornendo un secondo indice (per la colonna da scegliere)
+  - posso anche usare una lista di colonne: results.loc\[2, \["linkage", "n_clusters"]]
+
+- df_test_sorted\["uni_pred"] = uni_pred
+  - mi permette di aggiungere una colonna ad un dataframe
 
 # Matplotlib
 
@@ -74,6 +85,16 @@ NB: there are 2 ways to use matplotlib
   - an empty figure with no Axes
     - verranno aggiunti automaticamente con metodi come plt.plot(), ...
   - **usato con pyplot style**
+
+- plt.scatter(X\[feature], y)
+  - permette di disegnare uno scatterplot su un plt.figure() o su un plt.subplot()
+
+- plt.subplot(rows, cols, i)
+  - permette di disegnare una griglia (rows*cols) di subplot con i indice di subplot
+  - alla prossima chiamata di plt.scatter(), plt.plot(), ... si disegnerà nell'ultimo subplot chiamato
+
+- plt.pie(counts=clust_sizes_km\[1], labels=clust_sizes_km\[0], autopct='%1.1f%%')
+  - disegna un pie chart
 
 - fig, ax1 = plt.subplots()
   - **usato con OO syle**
@@ -89,6 +110,9 @@ NB: there are 2 ways to use matplotlib
   - NB: Axes non gestisce solo gli assi (che nome...), rappresenta tutto il riquadro del grafico invece
   - se passo nrow ed ncol: fig, ax = plt.subplots(2, 2)
     - ax diventa un array di Axes (in questo caso 2x2), ognuno dei quali mi rappresenta un riquadro in qui disegnare il mio plot
+
+- ax2 = ax1.twinx()  
+  - instantiate a second axes that shares the same x-axis
 
 ### Plotting dataframes
 
@@ -236,6 +260,42 @@ for score in scores:
         y_pred = clf.best_estimator_.predict(Xtest)
 ```
 
+## Regressione
+
+siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()` e `predict()`  sull'estimator che farà la regressione
+
+- stavolta il fitted estimator ci da a disposizione i suoi pesi con:
+  - weight_uni = univariate_estimator.coef_\[0]
+  - intercept = univariate_estimator.intercept_
+
+## Clustering
+
+- kmeans = KMeans(k, random_state=random_state); labels = kmeans.fit_predict(df)
+  - essendo un task unsupervised non ho neanche bisogno di fare training con fit o di splittare in trainset e testset
+
+- pg = ParameterGrid(parameters)
+  - produce una lista di mappe in cui ogni mappa rappresenta una combinazione dei parametri possibile
+  - utile in clustering quando si vuole vedere quale configurazione di parametri (es: eps e n_min in DBSCAN) produce il clustering migliore
+
+- DBSCAN(parameter_conf["eps"], min_samples=parameter_conf["min_samples"]).fit_predict(df)
+  - ha degli attributi utili una volta fittato
+    - db.n_clusters_
+    - db.n_noise_
+
+## preprocessing
+
+- pol_feat = PolynomialFeatures(degree=2, include_bias=False)
+  - questo permette di creare nuove feature che sono potenze di feature già presenti
+  - X_train_poly = pol_feat.fit_transform(X_train); X_test_poly = pol_feat.fit_transform(X_test)
+
+- pt = PowerTransformer()
+  - permette di rendere meno skewed alcune distribuzioni di dati rendendole più gaussiane
+  - df\[df.columns\[2:]] = pt.fit_transform(df\[df.columns\[2:]])
+
+- scaler = MinMaxScaler(feature_range=(0, 1))
+  - scala le features linearemente nel range spcificato
+  - df\[df.columns] = scaler.fit_transform(df\[df.columns])
+
 ## roba per valutazione dei modelli
 
 - test_set_accuracy = accuracy_score(ytest, ytest_dt)
@@ -249,6 +309,29 @@ for score in scores:
   - visualizzabile con:
     - disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=grid.classes_)
     - disp.plot()
+
+- mean_squared_error(y_test, y_pred) e r2_test = r2_score(y_test, y_pred)
+  - per valutare le predizioni di un regressore
+
+- kmeans.inertia_e silhouette_score(df, labels)
+  - autoesplicativi
+
+- pair_confusion_matrix = pair_confusion_matrix(km_labels, agg_labels)
+  - computa la pair_confusion_matrix; utile per confrontare due clustering scheme diversi
+  - restituisce una matrice 2x2 numpy, posso fare .sum() e accedere agli elementi singolarmente
+    - utile se voglio cacolare ade esempio la percentuale di match
+
+# Numpy
+
+- np.arange(1, 10, 1)
+  - restituisce un array contenente tutti gli elementi (estremo escluso)
+
+- np.linspace(1, 10, 10)
+  - mi divide l'intervallo da 1 a 10 in 10 elementi equidistanti, estremo incluso
+
+- clust_sizes_km = np.unique(labels,return_counts=True)
+  - restituisce l'array ordinato di elementi unique nell'array passato
+  - può restituire array aggiuntivi in base ai parametri passati; tra i più utili è il count di ogni unique element
 
 # Seaborn
 

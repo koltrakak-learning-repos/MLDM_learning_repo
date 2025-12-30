@@ -1,55 +1,66 @@
 In regression the target is numeric; the goal is forecasting continuous values
 
-response vector == predizione (non necessariamente un vettore se vogliamo predirre solamente una variabile)
+response vector == predizione (vettore colonna, una predizione per ogni riga del dataset)
 
 # Linear regression
+
+modelliamo la relazione tra attributi e variabile dipendente come una **combinazione lineare degli attributi**
+
+- per l'i-esima riga: y_i = w^T * x_i
+- definisco un iperpiano nello spazio d-dimensionale; con d numero di attributi
 
 i pesi che impariamo sono numerosi tanto quanto il numero di feature del dataset
 
 la predizione (response vector) è combinazione lineare dei pesi imparati con le feature di un data element
 
-un buon regressore impara dei pesi tali che l'errore di ogni predizione è minimizzato
+un buon regressore impara dei pesi tali che l'errore di ogni predizione rispetto alla label target è minimizzato across the training set
 
 - con un approccio del tipo Ordinary Least Squares
 - magari anche applicando regularization alla funzione obiettivo
 
 ## quality of the fitting
 
-la misura che utilizziamo è il coefficient of determination R^2
+Possiamo utilizzare MSE o RMSE, ma abbiamo un problema
+
+- MSE e RMSE sono influenzati dalla dimensione dei dati
+  - consider the sum of squared residuals we have
+    - a big value if the values are big
+    - a small value if the values are small
+
+we want to have a number that isn't influenced by the dimension of the data, in questo modo possiamo capire più facilmente la qualità del fitting
+
+- se è vicino a 1 è buono
+
+la misura che utilizziamo a questo scopo è il **coefficient of determination R^2**: 1 - SSE/SST
 
 - it compares the fit of the chosen model with that of a horizontal straight line
 - with perfect fitting the numerator of the second term is zero and R^2 = 1
-- if the model does not follow the trend of the data the numerator of the second term can reach or exceed the denominator, and R^2 can also be negative
-
-we want to have a number that isn't influenced by the dimension of the data
-
-- MSE e RMSE sono influenzati dalla dimensione dei dati
-
-if we consider only the sum of squared residuals we have
-
-- a big value if the values are big
-- a small value if the values are small
-
-## RMSE vs R^2
+- if the model does not follow the trend of the data the numerator of the second term can reach or exceed the denominator
+  - R^2 comincia a diventare minore di uno
+  - R^2 can also be negative
 
 # Polynomial regression
 
-what if we have a non linear relationship?
+what if we have a non linear relationship between the predictor variables and the target?
 
 we want to use linear methods because other ones are computationally expensive
 
 ## Univariate polynomial regression
 
-we can transform the univariate problem to have more variables, with those variables being the powers x^2, x^3, ...
+un problema univariato è un problema in cui ho solo una variabile predictor
+
+se la relazione tra il predictor è il mio target non è lineare, we can transform the univariate problem to have more variables, with those variables being the powers of the predictor: x^2, x^3, ...
 
 then we can do linear regression
 
-there is a substantial difference between this "synthetic" multivariate linear regression and the real one
+**NB**: questo è un esempio di feature transformation/engineering, stiamo ottenendo altri attributi trasformando quello che abbiamo già
+
+**NB**: there is a substantial difference between this "synthetic" multivariate linear regression and the real one
 
 - here we have an hyperparameter: the degree of the polynomial
-- we can use gridsearch and crossvalidation to choose the degree that best fits the data
-  - too low of a degree and we underfit
-  - too high of a degree and we overfit
+- we can use gridsearch and crossvalidation to choose the degree that best fits the data looking at RMSE or R^2
+  - too low of a degree and we underfit the training data
+  - too high of a degree and we overfit, we learn the noise of the training data
 
 ## Polynomial Regression Multivariata
 
@@ -92,47 +103,73 @@ Dove `X` può avere qualunque numero di colonne.
 * Aumenta facilmente l’overfitting → spesso utile usare **regularization (Ridge/Lasso)**.
 ```
 
-# Overfitting and regularisation
+# Fitting, overfitting and regularisation
 
-Regularisation is a technique that reduces overfitting. A general way for controlling overfitting is to simplify the model. Regularisation does indeed simplify the model
+The standard multivariate linear regression does not have hyperparameters for controlling the fitting quality, in particular to guarantee good performance on the test set
 
-To simplify a linear multivariete polynomial, we define a loss function dependent on the parameters of the model (weights)
+- corriamo il rischio di overfittare il training set se non facciamo nulla
 
-- then we can optimise the weights with gradient descent
+Regularisation is a technique that reduces overfitting.
+
+- A general way for controlling overfitting is to simplify the model.
+- Regularisation does indeed simplify the model
+
+To simplify a linear multivariate polynomial, we define a loss function dependent on the parameters of the model (weights)
+
+- tipicamente la loss function e MSE
 
 ## OLS
 
-Ordinary Least Squares (OLS) regression minimizes the prediction error on the training set
+Ordinary Least Squares (OLS) regression minimizes the prediction error (loss) on the training set
+
+- ammette un metodo esatto (formula chiusa) ma tipicamente si utilizza discesa del gradiente per approssimare i pesi ottimi
+  - il metodo esatto non scala per dataset grandi
 
 **Risk: overfitting, especially with many variables or noisy data**
 
-Regularization: technique to penalize model complexity a way to reduce the complexity is to reduce, in several ways, the values of the coefficients
+Applichiamo quindi regularization techniques to penalize model complexity and reduce overfitting
 
-Goal: find a good trade-off between accuracy and model simplicity
+- modelli complessi generalizzano male se il problema non ha qullo stesso grado di complessità (apprendono rumore)
+- a way to reduce the complexity is to reduce, in several ways, the values of the coefficients
+
+Goal: find a good trade-off between accuracy on the training set and model simplicity
+
+- chiaramente se regolarizzo troppo vado in underfitting
 
 ## Lasso regression
 
-L1-norm
+Aggiungo la L1-norm dei pesi (norm of degree 1) alla loss
 
-- norm of degree 1
+- sommatoria del valore assoluto dei pesi
+- questa è pesata da un ipeparametro alpha che definisce quanta regularization stiamo applicando
 
-this basically does feature selection
+Penalizza pesi grandi
 
-L1-regularization encourages sparsity in w
+- encourages sparsity in W
+- **this basically does feature selection**
 
-Struggles with collinearity among features
+NB: con lasso regression, alla fine del training, w embodies the importance of each feature in the regression model
+
+- questo perchè solamente le feature importanti (quelle che riducono tanto la loss) hanno il privilegio di avere un peso grande
+- le feature meno importanti avranno il loro peso ridotto dalla lasso penalty
+  - come è giusto che sia, feature poco importanti sono solo causa di overfitting
+
+struggles when predicting features are highly correlated
+
+- immagino che se una è importante, anche l'altra è importante e lasso non riesce a fare feature selection per scartarne una
 
 ## Ridge regression
 
-we still add a penalty term. A different one
-
-L2-norm
+we still add a penalty term. A different one L2-norm
 
 - norm of degree 2 (la norma è la square root of the sum of squares)
+- di nuovo penalizziamo pesi grandi
 
-dal grafico si vede bene che qua non stiamo facendo feature selection. piuttosto stiamo calibrando i pesi in maniera tale da ridurre overfitting
+dal grafico si vede bene che qua non stiamo facendo feature selection.
 
-Al contrario di Lasso, Ridge regressor è adatto in casi in cui si ha: Multicollinear data where features are highly correlated
+- Piuttosto stiamo calibrando i pesi in maniera tale da ridurre overfitting
+
+Al contrario di Lasso, Ridge regression è adatto in casi in cui si ha multicollinear data (predicting features are highly correlated)
 
 ### Che cosa sono Bias e Variance in un modello di regressione?
 
@@ -208,7 +245,9 @@ Addresses limitations of Ridge and Lasso:
 
 Offers a balance between these methods
 
-combines the two penalties
+- combines the two penalties
+
+Elastic net sembra essere OP ma richiede il tuning di due iperparametri
 
 # Comparison of regularized regression techniques
 
@@ -217,7 +256,3 @@ Choosing the right method depends on:
 - Presence of multicollinearity
 - Sparsity of the solution required (quanta feature selection è necessaria?)
 - Dimensionality of the dataset
-
-Elastic net sembra essere OP
-
-## What is the relationship between loss and accuracy?

@@ -1,5 +1,7 @@
 # Evaluation of a clustering scheme
 
+Evaluation of a clustering scheme is related only to the result of the clustering, not to the clustering technique itself
+
 since clustering in not supervised, evaluation is more difficult
 
 - we don't have a ground truth to compare with to abtain a notion of error/loss
@@ -7,8 +9,6 @@ since clustering in not supervised, evaluation is more difficult
 we need one or more score function to measure various properties of the clusters and of the clustering scheme as a whole
 
 - ad esempio, vorremmo uno score utile a capire il parametro k in k-means
-
-It is related only to the result, not to the clustering technique
 
 # Cohesion and separation measures
 
@@ -20,7 +20,7 @@ SSE/SSW misura la **coesione dei cluster**: quanto ogni punto è vicino al centr
 
 ## Sum of Squares Between clusters (SSB)
 
-Misura quanto i centroidi dei cluster sono lontani dalla media globale del dataset
+Misura quanto i centroidi dei cluster sono lontani dal centroide globale del dataset
 
 - è una **misura della separazione tra cluster**
 - SSB alta → i cluster sono molto lontani tra loro → buona separazione
@@ -37,19 +37,19 @@ TSS misura la **sparsity of the dataset**
 - TSS alta, abbiamo datapoints molto sparsi rispetto al centro
 - TSS bassa, abbiamo datapoints molto vicini al centro
 
-vale sempre che: TSS = SSE + SSB
+**NB**: vale sempre che: TSS = SSE + SSB
 
-A good clustering scheme
+Thus, a good clustering scheme:
 
-- deacreses (minimizes) SSE -> maximizes intracluster cohesion
+- deacreses (minimizes) SSE -> minimizes intracluster sparsity
 - and this increases (maximizes) SSB -> maximizes cluster separation
-- basta farne uno e l'altro viene da se: miminize SSE == maximize SSB
+- **basta farne uno e l'altro viene da se: miminize SSE == maximize SSB**
 
 # Silhouette score as a score for evaluation of a clustering scheme
 
 Requirements for a clustering quality score:
 
-- values are in a standard range, e.g. [1, 1]
+- values are in a standard range, e.g. \[-1, 1]
 - increases with the separation between clusters
 - decreases for clusters with low cohesion or, in other words, with high sparsity
 
@@ -63,11 +63,13 @@ Notiamo che la distorsione non è una misura adatta per valutare un clustering
 Silhouette score è invece un buon clustering quality score:
 
 - Considers the INDIVIDUAL contribution of each object, say xi, to cluster sparsity and separation from other clusters
+  - **ogni datapoint ha quindi un suo silhouette score**
 - For the global score of a cluster/clustering scheme compute the average score over the cluster/dataset
 
 **Intuition**:
 
-- when the score is less than zero for an object, it means that there is a dominance of objects in other clusters at a distance smaller than objects of the same cluster
+- when a datapoint has a score less than zero, it means that there is a dominance of objects in other clusters at a distance smaller than objects of the same cluster
+  - punti di altri cluster sono più simili a punti del mio cluster
   - sparsity domina
 - altrimenti, il contrario
   - separation domina
@@ -94,11 +96,13 @@ se silhouette score sono simili con varie configurazioni, una buona idea è cons
 
 partition è un termine che crea confusione
 
-**il gold standard è un insieme di etichette per il mio dataset**
+**il gold standard è un clustering scheme implementato da un insieme di etichette per ogni punto del dataset**
 
 perchè usare il gold standard? To validate a clustering technique which can be applied later to new, unlabelled data
 
 - confrontiamo il mio clustering scheme con quello del gold standard per capire se sto raggruppando bene o male
+- una volta trovato un clustering scheme soddisfacente secondo il mio gold standard applico questo schema ad altri dataset sperando di ottenere risultati altrettanto buoni
+  - simile a quello che si fa in supervised learning con un test set
 
 Frase originale:
 
@@ -131,3 +135,17 @@ Esempio:
 - clustering: {1, 1, 2, 2}
 
 I gruppi sono gli stessi, ma le etichette non corrispondono. Basta rinominare 1→A e 2→B per farle diventare confrontabili.
+
+## Similarity oriented measures
+
+Consider a clustering scheme yk(.) and compare it with the Gold Standard yg(.), consideriamo tutte le coppie di datapoint e recuperiamo i seguenti count:
+
+- SGSK if they belong to the same set in yg(.) and yk(.)
+- SGDK if they belong to the same set in yg(.) and not in yk(.)
+- DGSK if they belong to the same set in yk(.) but not in yg(.)
+- DGDK if they belong to different sets both in yg(.) and yk(.)
+
+A questo punto possiamo utilizzare vari score per confrontare i due clustering scheme **anche se il numero di cluster tra gold standard e il mio clustering è diverso**:
+
+- RAND score
+- Jaccard coefficient
