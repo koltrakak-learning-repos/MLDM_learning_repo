@@ -40,6 +40,9 @@
   - per droppare le righe che contengono un null
   - puoi fare così `df.shape[0] - df.dropna().shape[0]` per controllare quante righe null c'erano
 
+- df.notna()
+  - per ottenere un dataframe maschera booleana con la stessa forma del dataframe di partenza
+
 - df.drop()
   - Drop columns  -> df.drop(['B', 'C'], axis=1)
   - or rows       -> df.drop([0, 1])
@@ -47,10 +50,23 @@
 - df.sort_values(by=column, ascending=False)
   - per ordinare le righe di un dataframe secondo il valore di una colonna
 
+- df.nunique()
+  - restituisce una serie con il numero di valori unique per ogni colonna
+
+## Series
+
+Tutta questa roba vale anche quando si accede ad una colonna di un dataframe con df\["col"]
+
 - series.idxmax(axis=0)
   - per ottenere la riga di una serie con valore maggiore
   - tipicamente si usa quando si vuole cercare la riga migliore di un df
     - best_row = results.loc\[results.scoring==scoring_filter, scoring_filter].idxmax(axis=0)
+
+- series.unique()
+  - restituisce un array con i valori unique della serie
+
+- series.nunique()
+  - restituisce il numero di valori unique nella serie
 
 ### Accesso al contenuto del dataframe
 
@@ -281,6 +297,8 @@ siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()`
   - ha degli attributi utili una volta fittato
     - db.n_clusters_
     - db.n_noise_
+  - i punti classificati come rumore hanno come label: -1
+    - puoi rimuovere gli outlier con: db_labels\[db_labels != -1]
 
 ## preprocessing
 
@@ -295,6 +313,19 @@ siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()`
 - scaler = MinMaxScaler(feature_range=(0, 1))
   - scala le features linearemente nel range spcificato
   - df\[df.columns] = scaler.fit_transform(df\[df.columns])
+
+- le = LabelEncoder()
+  - permette di passare da categorical features a integer features assegnando interi successivi da 0 a n-1
+  - y = le.fit_transform(df_train\[target])
+
+- pca = PCA()
+  - permette di trasformare le features in principal components già ordinati per varianza spiegata
+  - X_trans = pca.fit_transform(X_full)
+  - il fitted object ha come attributo un array in cui ogni elemento contiene la percentuale di varianza spiegata: `pca.explained_variance_ratio_`
+
+- selector = SelectKBest(mutual_info_classif, k=k_best)
+  - permette di selezionare le k feature migliori secondo uno score che le feature hanno con il target
+  - X_train = selector.fit_transform(X_train_full, y_train)
 
 ## roba per valutazione dei modelli
 
@@ -332,6 +363,20 @@ siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()`
 - clust_sizes_km = np.unique(labels,return_counts=True)
   - restituisce l'array ordinato di elementi unique nell'array passato
   - può restituire array aggiuntivi in base ai parametri passati; tra i più utili è il count di ogni unique element
+
+- array.sort()
+  - ordina gli elementi inplace
+
+- cum_variances = np.cumsum(pca_variances)
+  - permette di ottenere un array della stessa shape in cui ogni elemento è la somma cumulata dei precedenti
+  - chiaramente utile con PCA
+
+- cumulative_variances > pca_threshold
+  - espressioni condizionali con array numpy producono array maschere in cui ogni elemento è true/false in base a se l'elemento nell'array rispetta o meno la condizione
+
+- cutoff_index = np.argmax(cumulative_variances > pca_threshold)
+  - argmax permette di trovare l'indice del valore più grande nell'array
+  - il primo se ce ne è più di uno
 
 # Seaborn
 

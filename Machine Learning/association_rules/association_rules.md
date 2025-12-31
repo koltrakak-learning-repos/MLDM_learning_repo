@@ -73,19 +73,21 @@ Trovare le rules consiste in:
 
 # Frequent itemset generation (apriori algorythm)
 
-sono tanti...
+dati D items, ci sono M = 2^D candidate itemset di cui bisogna controllare se sono frequent o meno
 
-...
+- controllare tutto con un approccio a forza bruta non è possibile
 
 Complexity: O(N W M)
 
-- per ogni candidate itemset (e già solo questi sono un puttanaio)
+- per ognuno degli M candidate itemset (e già solo questi sono un puttanaio)
 - devo scansionare N righe del db
-- scansionare ogni riga significa controllare M colonne
+- scansionare ogni riga significa controllare W colonne
 
 ## Pruning strategy
 
 Apriori principle: If an itemset is frequent, then all of its subsets must also be frequent
+
+viceversa, ed è questo il caso che ci interessa di più, se un itemset non è frequent, allora tutti i suoi subset sono anch'essi non frequent
 
 ## riassumendo
 
@@ -94,27 +96,40 @@ per generare frequent itemsets:
 1. parti con gli itemset che contengono un solo elemento
 2. computi il loro support ed elimina quelli sotto la soglia
 3. di quelli rimanenti calcoli gli itemset con un elemento in più ed elimini quelli che discendono da un itemset poco frequente
+    - questi si possono ripresentare nonostante non stia combinando direttamente con un itemset poco frequente
 4. a questo punto si hanno i candidate itemset frequenti con due elementi e si itera
 
 # Association rule generation (apriori algorythm)
 
 Ora che abbiamo un listone di itemset frequenti possiamo generare delle regole con un support altrettanto alto
 
-Give a frequent itemset L find all the non-empty subsets f app. L such that the confidence of rule f -> (L \ f) is not less than the minimum confidence threshold
+TASK: Given a frequent itemset L, find all the non-empty subsets f app. L such that: the confidence of rule f -> (L \ f) is not less than the minimum confidence threshold
 
-- i sottoinsiemi di un insieme sono un numero esponenziale
+- in pratica, cerchiamo tutti i possibili binary split con una confidence sufficentemente alta
+- i sottoinsiemi di un insieme (binary split) sono un numero esponenziale
 - anche qua dobbiamo fare pruning
 
-mentre per la generazione degli itemset frequenti si faceva pruning in base al support dell'itemset, per la generazione di association rules si fa pruning usando la confidence della regola
+mentre per la generazione degli itemset frequenti si faceva pruning in base al support dell'itemset, **per la generazione di association rules si fa pruning usando la confidence della regola**
 
 ricorda che conf(A, C) = sup(A,C) / sup(A)
 
 In particolare abbiamo che per regole generate dallo stesso itemset:
 
-- più roba c'è nell'antecedente, più il denominatore della confidence è alto -> più la confidence è bassa (il numeratore rimane lo stesso)
+- meno item ci sono nell'antecedente, più il denominatore della confidence è alto -> più la confidence è bassa (il numeratore rimane lo stesso)
 - questo significa che se una regola ha confidence bassa, tutte le altre regole discedenti da quest'ultima in cui si è spostato qualcosa da sinistra a destra avranno anch'esse una confidence bassa
-  - pruning
-- per ogni itemset si crea una lattice in cui si parte con tutto a sinistra e ad ogni livello si sposta un elemento a destra
+- abbiamo la nostra strategia di pruning
+  - per ogni itemset si crea una lattice in cui si parte con tutto a sinistra e ad ogni livello si sposta un elemento a destra
+  - se un elemento ha confidence bassa, tutti i suoi discendenti avranno confidence bassa
+
+esempio:
+
+- itemset = {ABCD}
+- conf(ABC -> D) = sup(ABCD)/sup(ABC)
+- conf(AB -> CD) = sup(ABCD)/sup(AB)
+- e così via ...
+- il numeratore rimane lo stesso, ma il denominatore ha un elemento in meno ogni volta
+  - sup(ABC) <= sup(AB)
+  - conf(ABC -> D) >= conf(AB -> CD)
 
 ## riassummendo
 
@@ -132,7 +147,7 @@ Association rule algorithms tend to produce too many rules
 
 - many of them are uninteresting or redundant
 - Redundant if {A, B, C} -> {D} and {A, B} -> {D} have same support and confidence
-  - tutte le volte che c'è ABD c'è anche ABCD -> basta ABD
+  - tutte le volte che c'è ABCD c'è anche ABD -> basta ABD
 
 Interestingness measures (other than support and confidence) can be used to prune/rank the derived rules
 
@@ -258,6 +273,12 @@ Nel db non abbiamo più transazioni piuttosto abbiamo tuple con dei valori per u
 
 c'è un'equivalenza tra i due ed è possibile passare da una rappresentazione all'altra
 
+- da multidimensional a monodimensional
+  - basta mettere i valori delle colonne in un unico set (transazione) in cui le posizioni rappresentano l'attributo del valore
+- da monodimensional a multidimensional
+  - abbiamo un one-hot-encoding dei valori presenti nella transazione
+  - lo schema multidimensionale ha una colonna per ogni possibile oggetto che può essere presente in una transazione
+  - ogni colonna ha come valore true se l'oggetto è presente nella transazione, false altrimenti
 - **questo significa che possiamo rituilizzare gli algoritmi già visti trasformando la rappresentazione multidimensionale a quella monodimensionale**
 
 **NB**: in questo contesto diventa importante **discretizzare** le variabili quantitative (numeriche) altrimenti avremmo troppi valori da considerare
@@ -277,7 +298,7 @@ per risolvere il problema si ragiona per classi di oggetti
 
 ## cosa cambia?
 
-quando si generalizza il supporto delle regole aumenta e viceversa
+quando si generalizza, il supporto delle regole aumenta e viceversa
 
 - new rules can become interesting / uninteresting
 
