@@ -46,12 +46,42 @@
 - df.drop()
   - Drop columns  -> df.drop(['B', 'C'], axis=1)
   - or rows       -> df.drop([0, 1])
+  - con questo metodo è molto utile ricordardi che le Series hanno un attributo index:
+    - df4 = df4.drop( df4\[df4\["InvoiceNo"].str.startswith("C")].index )
 
 - df.sort_values(by=column, ascending=False)
   - per ordinare le righe di un dataframe secondo il valore di una colonna
 
 - df.nunique()
   - restituisce una serie con il numero di valori unique per ogni colonna
+
+- df5.groupby(\["InvoiceNo", "Description"]).sum()
+  - groupby serve a raggruppare le righe che hanno lo stesso valore per uno o più attributti e poi applicare un’operazione (come sum, mean, count, ecc.).
+  - se raggruppo per più attributi, ottengo un indice multidimensionale
+  - dopo aver raggruppato posso anche decidere di applicare la mia operazione per i gruppi so sottoporzioni delle colonne
+    - df5.groupby(\["InvoiceNo", "Description"])\["Quantity"].sum()
+
+- df.groupby(\["InvoiceNo", "Description"])\["Quantity"].sum().unstack()
+  - unstack serve a spostare l'ultimo indice di riga e a farlo diventare un indice di colonna.
+  - Facendo unstack abbiamo spostato le N Description di ogni InvoiceNo in N colonne.
+  - L'indice diventa così unidimensionale e, per le Description di un determinato InvoiceNum
+    - nella sua colonna abbiamo il valore della somma che c'era presente prima,
+    - per le Description non presenti per un determinato InvoiceNo abbiamo invece NaN
+
+- basket_sets = basket.map(encode_units)
+  - applica una funzione a tutti gli elementi del dataframe
+  - def encode_units(x): return x >= 0
+
+- basket2.astype("bool")
+  - per cambiare il tipo di tutte le colonne di un dataframe
+
+### Plotting dataframes
+
+- df.plot(x="lift", y="confidence", kind="scatter")
+
+- df.hist()
+  - plotta un istogramma per tutte le colonne
+  - plt.hist(df\[target\]); invece plotta solo una singola colonna
 
 ## Series
 
@@ -82,6 +112,9 @@ Tutta questa roba vale anche quando si accede ad una colonna di un dataframe con
 
 - results\[results.scoring=="accuracy"]
   - per ottenere un dataframe filtrato dall'applicazione della maschera
+
+- results\[~(results.scoring=="accuracy")]
+  - puoi usare l'operatore ~ per negare la maschera e quindi filtrare con logica negativa
 
 - results.loc\[results.scoring=="accuracy","accuracy"]
   - posso usare loc anche per ottenere una serie da una colonna di un dataframe fornendo un secondo indice (per la colonna da scegliere)
@@ -129,12 +162,6 @@ NB: there are 2 ways to use matplotlib
 
 - ax2 = ax1.twinx()  
   - instantiate a second axes that shares the same x-axis
-
-### Plotting dataframes
-
-- df.hist()
-  - plotta un istogramma per tutte le colonne
-  - plt.hist(df\[target\]); invece plotta solo una singola colonna
 
 # Scikit learn
 
@@ -363,6 +390,10 @@ siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()`
 - clust_sizes_km = np.unique(labels,return_counts=True)
   - restituisce l'array ordinato di elementi unique nell'array passato
   - può restituire array aggiuntivi in base ai parametri passati; tra i più utili è il count di ogni unique element
+
+- np.asarray(null_mask)
+  - trasforma oggetti vari come serie e dataframe in array numpy
+  - utile se vuoi ad esempio contare gli elementi di una serie: n_false, ntrue = np.unique(np.asarray(null_mask), return_counts=True)
 
 - array.sort()
   - ordina gli elementi inplace
