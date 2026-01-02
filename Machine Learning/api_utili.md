@@ -320,7 +320,7 @@ siccome anche questo è un task supervisionato si usano sempre i metodi  `fit()`
   - produce una lista di mappe in cui ogni mappa rappresenta una combinazione dei parametri possibile
   - utile in clustering quando si vuole vedere quale configurazione di parametri (es: eps e n_min in DBSCAN) produce il clustering migliore
 
-- DBSCAN(parameter_conf["eps"], min_samples=parameter_conf["min_samples"]).fit_predict(df)
+- DBSCAN(parameter_conf\["eps"], min_samples=parameter_conf\["min_samples"]).fit_predict(df)
   - ha degli attributi utili una volta fittato
     - db.n_clusters_
     - db.n_noise_
