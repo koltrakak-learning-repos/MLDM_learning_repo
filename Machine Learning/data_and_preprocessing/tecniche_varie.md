@@ -28,7 +28,7 @@ why is it needed:
 
 - Many algorithms require numeric features
   - eg: categorical features must be transformed into numeric
-- Classification requires a target with nominal values, a numerical target can be discretised
+- Classification requires a target with nominal values, a numerical (continuous) target can be discretised
 - Discovery of association rules require boolean features
   - a numerical feature can be discretised
   - and transformed int a series of boolean features (una per ogni valore discretizzato)
