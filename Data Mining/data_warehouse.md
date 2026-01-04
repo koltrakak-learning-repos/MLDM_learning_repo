@@ -1,6 +1,6 @@
 Riprendiamo il concetto di Buisness intelligence:
 
-- abbiamo visto che è un termine ombrello che racchiude tutte le tecniche e tecnologie e sistemi informativi che abbiamo visto essere fondamentali per prendere decisioni
+- abbiamo visto che è un termine ombrello che racchiude tutte le tecnologie e sistemi informativi che abbiamo visto essere fondamentali per prendere decisioni
   - BI integrates across all these, providing a unified platform that collects ERP data, automates MIS reporting, enables DSS-style analysis, and presents EIS-level dashboards
 - **Transforming huge amounts of raw data into useful information to support effective and efficient business strategies.**
 
@@ -34,7 +34,7 @@ It also provides the following features:
 
 - It is **subject oriented** as opposed to fact oriented
   - traditional DBMSs are fact oriented in the sense that they focus on making an application work by storing events (facts) that happened
-    - the facts are spread across my information systems
+    - the facts related to a subject are spread across my information systems
   - being subject oriented means being more focused on analyzing subjects more broadly, integrating all information related to that subject
     - the DW collects the scattered facts about a subject in a single place
     - e.g. we may have customer as a subject and want to know what a customer has bought, when and how much they spent, etc..
@@ -94,7 +94,7 @@ It includes a set of information pieces relevant to a specific business area, co
 
 OLAP analyses allow users to interactively navigate the data warehouse information.
 
-Data is typically analyzed at different levels of aggregation (we can chooseto see more or less details), by applying subsequent **OLAP operators**
+Data is typically analyzed at different levels of aggregation (we can choose to see more or less details), by applying subsequent **OLAP operators**
 
 Data warehouses, being an OLAP technology, support OLAP operators
 

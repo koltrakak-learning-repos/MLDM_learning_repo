@@ -1,6 +1,6 @@
 # Challenges today | motivation for data lakes
 
-Circa 15 anni fa, ci si è accorti di avere un sacco di dati (**dark data**) inutilizzati e che buttare via quest'ultimi non è una buona idea
+Circa 15 anni fa, ci si è accorti di avere un sacco di dati (**dark data**) inutilizzati, e che buttare via quest'ultimi non è una buona idea
 
 - se ho dei sensori e non riesco ad analizzare tutti i dati che producono sto sprecando delle opportunità
 
@@ -35,7 +35,7 @@ Data lakes provide a foundation for data science and AI
 
 in DW si usa **schema-on-write**
 
-- decido lo schema dei dati quando scrivo i dati dentro a DW
+- decido lo schema dei dati quando prima di scrivere i dati dentro a DW
 
 in DL si usa **schema-on-read**
 
