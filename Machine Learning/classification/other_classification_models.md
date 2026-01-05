@@ -117,7 +117,6 @@ the model is the training set itself
 
 ci sono degli iperparametri:
 
-- quanto lontano guardo?
 - k
 - metrica con cui misurare la distanza
   - Mahalanobis distance funziona bene dato che tiene conto della varianza degli attributi
@@ -174,12 +173,14 @@ the quality of many INDIPENDENT classifiers, is better than that of one single c
 - if the base classifiers are equal (the same classifier), the ensemble error rate is still epsilon
   - tutti mi danno lo stesso risultato
 - if the base classifiers have all error rate epsilon, but they are independent (their errors are uncorrelated) then **the ensemble will be wrong only when the majority of the base classifier is wrong**
+- thus ensemble classifiers are useful when base classifiers are indipendent and are better at classifying than chance
+  - accuracy > 50%, altrimenti è facile che la maggioranza dei classifier si sbagli
 
 But, is it easy to obtain many different INDIPENDENT classifiers?
 
 - the answer is no
 
-One way is to choose different subsets of predicting attributes for different classifiers
+One way is to **choose different subsets of predicting attributes for different classifiers**
 
 - this done for example by the random forest classifier that combines many indipendent decision trees
 

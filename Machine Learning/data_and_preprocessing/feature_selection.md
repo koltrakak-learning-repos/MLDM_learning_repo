@@ -111,11 +111,13 @@ Correlation zero == absence of **linear** relationship between the variables
 
 We're going to use correlation this way:
 
-- Identifying Redundant Features for Dimensionality reduction
+**Role of Correlation in Feature selection**
+
+- Identifying Redundant Features
   - Features highly correlated with each other contain overlapping information
   - Retain one feature from such groups to reduce dimensionality and overfitting
 
-- Identifying Relevant Features (filtering)
+- Identifying Relevant Features
   - High correlation with the target variable helps identify features with high predictive power
   - **NB**: low correlation between a feature and the target **can sometimes hide a non–linear correlation**, therefore the mere use of low correlation for feature filtering can be dangerous
     - correlation should be complemented with other techniques to handle nonlinear relationships (non mi sembra però che abbiamo visto queste altre tecniche)

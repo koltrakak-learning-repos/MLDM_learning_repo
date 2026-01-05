@@ -6,7 +6,7 @@ Abbiamo anche visto che usiamo l’errore del test set come stima del run time e
 
 - ci interessa più che altro un ***upper bound del run time error***
 - **If the test set error ratio is x, we should expect a run-time error x ± ???**
-  - quanto fidarsi del training error? quanto può variare rispetto al runtime error?
+  - quanto fidarsi del test error? quanto può variare rispetto al runtime error?
 
 Usiamo metodi statistici!
 
@@ -198,10 +198,10 @@ Accuracy non è sufficiente come unica misura. A classification error can have d
 
 - Precision: TP/(TP+FP)
   - the rate of true positives among the positive classifications
-  - alto quando non classifico come positivi individui che non lo sono
+  - basso quando classifico come negativi individui che non lo sono
 - Recall: TP/(TP+FN)
   - the rate of true positives that i can catch
-  - alto quando non classifico come negativi individui che non lo sono
+  - basso quando classifico come positivi individui che non lo sono
 - F1-score: 2*(prec*rec)/(prec+rec)
   - grande quando precision e recall sono simili (non sbilanciati)
   - alto quando ho pochi FP e FN, ovvero quando catturo la maggior parte dei casi positivi senza avere tanti FP
@@ -221,7 +221,7 @@ F1-score sempre interessante perchè mi da un'idea di quanto precision e recall 
 Quando ho più di due classi si estende la confusion matrix aggiungendo oltre alle predizioni corrette le predizioni sbagliate e con quale classe è stata sbagliata
 
 - es: FP_a-b ho predetto b al posto di a
-- **NB**: adessono abbiamo solo true prediction (TP) e false prediction (FP); non abbiamo più false negatives
+- **NB**: adesso abbiamo solo true prediction (TP) e false prediction (FP); non abbiamo più false negatives
 
 Accuracy adesso diventa:
 
