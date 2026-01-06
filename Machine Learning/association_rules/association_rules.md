@@ -87,7 +87,7 @@ Complexity: O(N W M)
 
 Apriori principle: If an itemset is frequent, then all of its subsets must also be frequent
 
-viceversa, ed è questo il caso che ci interessa di più, se un itemset non è frequent, allora tutti i suoi subset sono anch'essi non frequent
+viceversa, ed è questo il caso che ci interessa di più, se un itemset non è frequent, allora tutti i suoi subperset sono anch'essi non frequent
 
 ## riassumendo
 
@@ -117,6 +117,7 @@ In particolare abbiamo che per regole generate dallo stesso itemset:
 
 - meno item ci sono nell'antecedente, più il denominatore della confidence è alto -> più la confidence è bassa (il numeratore rimane lo stesso)
 - questo significa che se una regola ha confidence bassa, tutte le altre regole discedenti da quest'ultima in cui si è spostato qualcosa da sinistra a destra avranno anch'esse una confidence bassa
+  - **i discendenti di una regola con confidence bassa hanno confidence bassa**
 - abbiamo la nostra strategia di pruning
   - per ogni itemset si crea una lattice in cui si parte con tutto a sinistra e ad ogni livello si sposta un elemento a destra
   - se un elemento ha confidence bassa, tutti i suoi discendenti avranno confidence bassa

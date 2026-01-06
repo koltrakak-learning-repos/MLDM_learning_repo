@@ -22,6 +22,11 @@ Le misure di separation che abbiamo visto sono quattro:
 
 the strategy we use to compute the separation between clusters is an **hyperparameter**
 
+considerazioni:
+
+- alta complessità computazionale
+- il dendogram aiuta l'interpretazione del clustering
+
 # density-based clustering
 
 questi metodi funzionano bene anche con cluster non convessi
@@ -63,7 +68,7 @@ considerazioni:
 - Finds clusters of any shape
 - Is robust w.r.t. noise
 - Problems if clusters have widely varying densities
-- richiede tuning preciso di epsilone e del threshold minpoints
+- richiede tuning preciso di epsilon e del threshold minpoints
 
 ### How to set epsilon e minPoints
 

@@ -66,7 +66,7 @@ the optimal solution is NOT guaranteed
 
 the starting point is crucial for not getting stuck in a local minimum
 
-we can just try with a set of many starting points and see what gives us the best solution (distorsione minore == cluster più compatti == elementi più simili tra di loro)
+we can just try with a set of many starting points and see what gives us the best solution (distorsione minore ==> cluster più compatti ==> elementi più simili tra di loro)
 
 ## How can we find the number of clusters?
 
@@ -118,6 +118,7 @@ pro:
 
 contro:
 
+- doesn't work with categorical data because we can't compute distances or calculate centroids
 - it is very sensitive to outliers
 - does not deal with noise
 - this algorythm doesn't work well when the points aren't distributed circularly wrt the centroids

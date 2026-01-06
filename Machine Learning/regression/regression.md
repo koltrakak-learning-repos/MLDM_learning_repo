@@ -116,7 +116,7 @@ Regularisation is a technique that reduces overfitting.
 
 To simplify a linear multivariate polynomial, we define a loss function dependent on the parameters of the model (weights)
 
-- tipicamente la loss function e MSE
+- tipicamente la loss function è MSE
 
 ## OLS
 
@@ -156,7 +156,8 @@ NB: con lasso regression, alla fine del training, w embodies the importance of e
 
 struggles when predicting features are highly correlated
 
-- immagino che se una è importante, anche l'altra è importante e lasso non riesce a fare feature selection per scartarne una
+- Tends to choose one arbitrarily instead of taking them together
+- se una è importante, anche l'altra è importante (?) e lasso ne scarta via una
 
 ## Ridge regression
 
@@ -170,6 +171,10 @@ dal grafico si vede bene che qua non stiamo facendo feature selection.
 - Piuttosto stiamo calibrando i pesi in maniera tale da ridurre overfitting
 
 Al contrario di Lasso, Ridge regression è adatto in casi in cui si ha multicollinear data (predicting features are highly correlated)
+
+- Tends to select them together rather than choosing one arbitrarily, shrinks their coefficients toward each other using the Ridge-like penalty
+- questo non è un problema dal punto di vista della predizione dato che, come abbiamo visto, feature altamente correlate tra di loro sono ridondanti
+- è un problema dal punto di vista dell'interpratabilità del modello dato che sembra che la feature scartata non sia importante
 
 ### Che cosa sono Bias e Variance in un modello di regressione?
 
